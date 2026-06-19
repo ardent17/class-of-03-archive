@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" type="image/jpeg" href="images/mascot.png">
+<title>CCHS Class of 2003</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+
+body {
+  background-color: #1a2a5e;
+  background-image:
+    linear-gradient(45deg, #14224d 25%, transparent 25%, transparent 75%, #14224d 75%, #14224d),
+    linear-gradient(45deg, #14224d 25%, transparent 25%, transparent 75%, #14224d 75%, #14224d);
+  background-size: 20px 20px;
+  background-position: 0 0, 10px 10px;
+  font-family: 'Comic Sans MS', 'Chalkboard SE', sans-serif;
+  color: #333;
+  margin: 0;
+  padding: 20px;
+  cursor: crosshair;
+}
+
+#container {
+  max-width: 900px;
+  margin: 0 auto;
+  background: #ffffff;
+  color: #000;
+  border: 4px dashed #4169e1;
+  box-shadow: 10px 10px 0px #ff8c00;
+  padding: 20px;
+}
+
+header {
+  text-align: center;
+  border-bottom: 3px double #4169e1;
+  padding-bottom: 10px;
+  margin-bottom: 20px;
+}
+h1 { font-family: 'VT323', monospace; font-size: 3em; color: #4169e1; text-shadow: 2px 2px #ff8c00; margin: 0; }
+marquee { background: #ff8c00; color: #fff; font-weight: bold; padding: 5px; border: 1px solid #4169e1; font-family: monospace; }
+
+.intro { font-family: 'Courier New', Courier, monospace; text-align: center; margin-bottom: 30px; }
+
+.section-header {
+  font-family: 'VT323', monospace; font-size: 2.5em; color: #4169e1;
+  margin-bottom: 15px; text-align: left; text-shadow: 2px 2px #ff8c00;
+}
+
+.category-container { margin-bottom: 40px; }
+.category-title { font-family: 'VT323', monospace; font-size: 2em; background: #4169e1; color: white; display: inline-block; padding: 0 10px; margin-bottom: 0; border: 2px solid #ff8c00; }
+.category-desc { font-family: 'Courier New', Courier, monospace; color: #4169e1; font-weight: bold; margin: 5px 0 10px 0; font-size: 14px; background: rgba(255, 140, 0, 0.15); display: inline-block; padding: 2px 5px; border: 1px dotted #ff8c00; }
+
+.shelf { background: #8b5a2b; border-bottom: 15px solid #5c3a18; padding: 15px 10px 0 10px; display: flex; gap: 15px; flex-wrap: wrap; box-shadow: 0px 5px 10px rgba(0,0,0,0.5); min-height: 140px; align-items: flex-end; }
+
+.zine {
+  height: 140px; width: auto; min-width: 80px;
+  background: #fff; border: 1px solid #000; box-shadow: -3px 3px 5px rgba(0,0,0,0.3);
+  display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;
+  cursor: pointer; transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  position: relative; overflow: hidden; box-sizing: border-box; transform-origin: bottom center;
+}
+.zine::before { content: ''; position: absolute; left: 2px; top: 0; bottom: 0; width: 4px; background: rgba(0,0,0,0.2); border-left: 1px dashed rgba(255,255,255,0.4); z-index: 5; pointer-events: none; }
+.zine:hover { transform: scale(2.5) translateY(-5px) rotate(0deg) !important; z-index: 1000 !important; box-shadow: -15px 15px 25px rgba(0,0,0,0.8) !important; }
+
+.zine-cover-img { height: 140px; width: auto; object-fit: contain; display: block; position: relative; z-index: 1; }
+.zine-text-wrapper { padding: 10px; display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100%; width: 100px; box-sizing: border-box; z-index: 2; }
+.zine-title { font-size: 13px; font-weight: bold; margin-bottom: 5px; z-index: 2; position: relative; }
+.zine-author { font-size: 11px; color: #333; z-index: 2; position: relative; }
+
+.community-wall { margin-top: 40px; border-top: 3px double #4169e1; padding-top: 20px; }
+#chattable { width: 100%; height: 350px; border: 4px dashed #ff8c00; background: #ffffff; box-shadow: 6px 6px 0px #4169e1; box-sizing: border-box; }
+
+#zine-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.9); z-index: 10000; justify-content: center; align-items: center; }
+.modal-content { background: #fff; width: 95%; max-width: 1200px; height: 95%; border: 5px double #4169e1; padding: 0; position: relative; font-family: 'Courier New', Courier, monospace; display: flex; flex-direction: column; overflow: hidden; }
+
+.modal-toolbar { display: flex; justify-content: space-between; align-items: center; background: #1a2a5e; color: #fff; padding: 5px 15px; border-bottom: 2px solid #ff8c00; font-family: 'VT323', monospace; flex-wrap: wrap; gap: 10px; }
+.toolbar-group { display: flex; align-items: center; gap: 15px; }
+.t-title { font-size: 1.5em; font-weight: bold; color: #ff8c00; text-shadow: 1px 1px #000; }
+.t-author { font-size: 1.2em; color: #ccc; }
+
+.page-btn { background: #4169e1; color: white; border: 2px outset #8aa3f0; font-family: 'VT323', monospace; font-size: 1.2em; cursor: pointer; padding: 2px 10px; }
+.page-btn:active { border-style: inset; background: #2f4fc0; }
+.page-btn:disabled { background: #555; border-color: #777; color: #aaa; cursor: not-allowed; }
+#page-info { font-family: 'VT323', monospace; font-size: 1.2em; color: #ff8c00; background: #111; padding: 2px 10px; border: 1px solid #ff8c00; }
+.download-link { font-family: 'VT323', monospace; font-size: 1.2em; color: #ff8c00; text-decoration: none; border: 1px dashed #ff8c00; padding: 2px 10px; background: #222; }
+.download-link:hover { background: #ff8c00; color: white; }
+.close-btn { background: #d11; color: white; border: 2px outset #fff; cursor: pointer; font-weight: bold; padding: 2px 10px; font-family: 'VT323', monospace; font-size: 1.2em; }
+
+#zine-reader { display: flex; flex-direction: column; align-items: flex-start; justify-content: flex-start; flex-grow: 1; overflow: auto; background: #222; padding: 10px; border: none; }
+#pdf-canvas { background: white; box-shadow: 5px 5px 15px rgba(0,0,0,0.8); border: 1px solid #000; margin: auto; }
+.fit-to-screen { max-width: 100%; max-height: 100%; object-fit: contain; }
+
+.glitter-trail { position: absolute; width: 5px; height: 5px; border-radius: 50%; pointer-events: none; z-index: 99999; animation: glitter-fade 0.5s linear forwards; }
+@keyframes glitter-fade { 0% { opacity: 1; transform: scale(1) translateY(0); } 100% { opacity: 0; transform: scale(0.2) translateY(15px); } }
+
+footer { text-align: center; margin-top: 40px; font-size: 0.8em; opacity: 0.8; font-family: monospace; color: #f7f8f9; }
+footer a { color: #f7f8f9; text-decoration: underline; }
+</style>
+
+<!-- PDF.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script>
+  pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+</script>
+</head>
+<body>
+<div id="container">
+
+  <header>
+    <h1>[ CCHS Class of 2003 ]</h1>
+    <marquee scrollamount="5">Welcome! Click any cover to flip through it right in your browser.</marquee>
+  </header>
+
+  <p class="intro">Click a cover to open it!</p>
+
+  <div id="shelves-container"></div>
+
+  <div class="community-wall">
+    <h3 class="section-header">Sign the Yearbook</h3>
+    <p style="font-family:'Courier New', Courier, monospace; margin-top:-5px;">
+      Say hi, share a memory, reconnect with classmates!
+    </p>
+    <iframe src="https://iframe.chat/embed?chat=classof03" id="chattable" title="Class of 2003 Community Chat"></iframe>
+  </div>
+
+  <footer>
+    <p>Built for the CCHS Class of 2003. Engine adapted from the
+      <a href="https://littlefreezinelibrary.neocities.org/local" target="_blank">Little Free Zine Library</a>.</p>
+  </footer>
+
+</div>
+
+<div id="zine-modal">
+  <div class="modal-content">
+    <div class="modal-toolbar">
+      <div class="toolbar-group">
+        <span id="modal-title" class="t-title">Title</span>
+        <span class="t-author">by <span id="modal-author">Author</span></span>
+      </div>
+      <div class="toolbar-group">
+        <button class="page-btn" id="prev-page" onclick="goPrevPage()">◀ PREV</button>
+        <span id="page-info">PAGE <span id="page-num">1</span> / <span id="page-count">?</span></span>
+        <button class="page-btn" id="next-page" onclick="goNextPage()">NEXT ▶</button>
+      </div>
+      <div class="toolbar-group">
+        <button class="page-btn" onclick="zoomOut()" title="Zoom Out">🔍-</button>
+        <button class="page-btn" onclick="resetZoom()" title="Fit to Screen">FIT</button>
+        <button class="page-btn" onclick="zoomIn()" title="Zoom In">🔍+</button>
+        <button class="page-btn" onclick="rotateZine()" title="Rotate 90°">↻</button>
+      </div>
+      <div class="toolbar-group">
+        <a id="modal-download-btn" class="download-link" href="#" target="_blank" download>[💾 SAVE PDF]</a>
+        <button class="close-btn" onclick="closeModal()">[X] CLOSE</button>
+      </div>
+    </div>
+    <div id="zine-reader">
+      <canvas id="pdf-canvas" class="fit-to-screen"></canvas>
+    </div>
+  </div>
+</div>
+
+<script>
+function escapeHTML(str) {
+  if (!str) return "";
+  return str.replace(/[&<>'"]/g, tag => ({
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'
+  }[tag]));
+}
+
+/* =========================================
+=== YOUR LIBRARY — EDIT THIS LIST ===
+=========================================
+   Each entry needs:
+     title    - displayed name
+     author   - subtitle / credit
+     category - "Yearbooks" or "Other"
+     pdf_url  - path to the PDF (relative to this HTML file, or a full URL)
+     color    - (optional) fallback background while the cover loads
+     cover_url- (optional) custom cover image; if omitted, the FIRST PAGE
+                of the PDF is rendered automatically as the cover.
+
+   pdf_url MUST point to a real file. If your PDFs are in a "files"
+   folder next to this page, use "files/yearbook-2003.pdf" etc.
+*/
+const ZINES = [
+  { title: "2003 Yearbook", author: "CCHS", category: "Yearbooks", pdf_url: "files/2002nowandthen.pdf" },
+  // { title: "Prom Program", author: "CCHS", category: "Other", pdf_url: "files/prom.pdf" },
+];
+
+const categories = [
+  { id: "Yearbooks", name: "Yearbooks",   desc: "Class yearbooks, scanned and ready to flip through." },
+  { id: "Other",     name: "Other Media", desc: "Coming soon!" }
+];
+
+// --- Render the shelves ---
+function loadLibrary() {
+  const container = document.getElementById('shelves-container');
+  container.innerHTML = '';
+
+  categories.forEach(cat => {
+    const itemsInCat = ZINES.filter(z => z.category === cat.id);
+
+    const catWrapper = document.createElement('div');
+    catWrapper.className = 'category-container';
+    catWrapper.innerHTML = `
+      <h3 class="category-title">&gt;&gt; ${escapeHTML(cat.name.toUpperCase())}</h3><br>
+      <span class="category-desc">${escapeHTML(cat.desc)}</span>
+    `;
+
+    const shelf = document.createElement('div');
+    shelf.className = 'shelf';
+
+    if (itemsInCat.length === 0) {
+      shelf.innerHTML = `<span style="color:#fff; font-family:monospace;">( Shelf is empty )</span>`;
+    } else {
+      itemsInCat.forEach(zine => {
+        const zElement = document.createElement('div');
+        zElement.className = 'zine';
+        zElement.style.backgroundColor = zine.color || '#ffffff';
+        zElement.style.transform = `rotate(${Math.floor(Math.random() * 10) - 5}deg)`;
+
+        if (zine.cover_url) {
+          // Manual cover image override
+          zElement.innerHTML = `<img src="${escapeHTML(zine.cover_url)}" class="zine-cover-img" alt="Cover">`;
+        } else {
+          // Auto-generate the cover from the PDF's first page
+          const thumb = document.createElement('canvas');
+          thumb.className = 'zine-cover-img';
+          zElement.appendChild(thumb);
+          renderThumbnail(zine, thumb, zElement);
+        }
+
+        zElement.onclick = () => openModal(zine);
+        shelf.appendChild(zElement);
+      });
+    }
+
+    catWrapper.appendChild(shelf);
+    container.appendChild(catWrapper);
+  });
+}
+
+// --- Draw a PDF's first page onto a small canvas as its cover ---
+function renderThumbnail(zine, canvasEl, zElement) {
+  pdfjsLib.getDocument(zine.pdf_url).promise
+    .then(pdf => pdf.getPage(1))
+    .then(page => {
+      const base = page.getViewport({ scale: 1 });
+      const scale = 280 / base.height; // 2x shelf height for a sharp thumbnail
+      const viewport = page.getViewport({ scale });
+      canvasEl.width = viewport.width;
+      canvasEl.height = viewport.height;
+      return page.render({ canvasContext: canvasEl.getContext('2d'), viewport }).promise;
+    })
+    .catch(err => {
+      console.error("Couldn't render cover for:", zine.title, "->", zine.pdf_url, err);
+      // Fallback to a text cover so the shelf is never blank
+      zElement.innerHTML = `
+        <div class="zine-text-wrapper">
+          <div class="zine-title">${escapeHTML(zine.title)}</div>
+          <div class="zine-author">by ${escapeHTML(zine.author)}</div>
+        </div>`;
+    });
+}
+
+// --- PDF.js reader ---
+let pdfDoc = null, pageNum = 1, pageIsRendering = false, pageNumIsPending = null;
+let currentRotation = 0, basePdfScale = 2.0;
+const canvas = document.getElementById('pdf-canvas');
+const ctx = canvas.getContext('2d');
+
+function renderPage(num) {
+  pageIsRendering = true;
+  pdfDoc.getPage(num).then(page => {
+    const viewport = page.getViewport({ scale: basePdfScale, rotation: currentRotation });
+    canvas.height = viewport.height;
+    canvas.width = viewport.width;
+    page.render({ canvasContext: ctx, viewport }).promise.then(() => {
+      pageIsRendering = false;
+      if (pageNumIsPending !== null) { renderPage(pageNumIsPending); pageNumIsPending = null; }
+    });
+  });
+  document.getElementById('page-num').textContent = num;
+  document.getElementById('prev-page').disabled = num <= 1;
+  document.getElementById('next-page').disabled = num >= pdfDoc.numPages;
+}
+
+function queueRenderPage(num) { if (pageIsRendering) pageNumIsPending = num; else renderPage(num); }
+function goPrevPage() { if (pageNum <= 1) return; pageNum--; queueRenderPage(pageNum); }
+function goNextPage() { if (pageNum >= pdfDoc.numPages) return; pageNum++; queueRenderPage(pageNum); }
+
+function zoomIn() { canvas.classList.remove('fit-to-screen'); basePdfScale += 0.25; queueRenderPage(pageNum); }
+function zoomOut() { canvas.classList.remove('fit-to-screen'); if (basePdfScale <= 0.5) return; basePdfScale -= 0.25; queueRenderPage(pageNum); }
+function resetZoom() { canvas.classList.add('fit-to-screen'); basePdfScale = 2.0; queueRenderPage(pageNum); }
+function rotateZine() { currentRotation = (currentRotation + 90) % 360; queueRenderPage(pageNum); }
+
+function openModal(zine) {
+  document.getElementById('modal-title').innerText = zine.title;
+  document.getElementById('modal-author').innerText = zine.author;
+  document.getElementById('modal-download-btn').href = zine.pdf_url;
+  document.getElementById('zine-modal').style.display = 'flex';
+
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  currentRotation = 0;
+  basePdfScale = 2.0;
+  canvas.classList.add('fit-to-screen');
+  document.getElementById('page-num').textContent = "1";
+  document.getElementById('page-count').textContent = "?";
+  document.getElementById('prev-page').disabled = true;
+  document.getElementById('next-page').disabled = true;
+
+  pdfjsLib.getDocument(zine.pdf_url).promise.then(loadedDoc => {
+    pdfDoc = loadedDoc;
+    document.getElementById('page-count').textContent = pdfDoc.numPages;
+    pageNum = 1;
+    renderPage(pageNum);
+  }).catch(err => {
+    console.error("Error loading PDF:", zine.pdf_url, err);
+    alert("That file couldn't be loaded. Check the pdf_url path:\n" + zine.pdf_url);
+  });
+}
+
+function closeModal() {
+  document.getElementById('zine-modal').style.display = 'none';
+  pdfDoc = null;
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+}
+
+// --- Glitter trail ---
+const glitterColors = ['#4169e1', '#ff8c00', '#ffffff', '#ffa733'];
+let lastGlitterTime = 0;
+document.addEventListener('mousemove', (e) => {
+  const now = Date.now();
+  if (now - lastGlitterTime < 15) return;
+  lastGlitterTime = now;
+  const glitter = document.createElement('div');
+  glitter.className = 'glitter-trail';
+  glitter.style.left = (e.pageX + (Math.random() - 0.5) * 20) + 'px';
+  glitter.style.top = (e.pageY + (Math.random() - 0.5) * 20) + 'px';
+  const color = glitterColors[Math.floor(Math.random() * glitterColors.length)];
+  glitter.style.backgroundColor = color;
+  glitter.style.boxShadow = `0 0 5px ${color}`;
+  document.body.appendChild(glitter);
+  setTimeout(() => glitter.remove(), 500);
+});
+
+loadLibrary();
+</script>
+
+<!-- Chattable -->
+<script src="https://iframe.chat/scripts/main.min.js"></script>
+<script>
+  if (window.chattable) {
+    chattable.initialize({ theme: "Wannabe XP" });
+  }
+</script>
+
+<footer>
+  <p>
+    Built for the CCHS Class of 2003 as a community archive project.
+    Engine adapted from the
+    <a href="https://littlefreezinelibrary.neocities.org/local" target="_blank" rel="noopener noreferrer">Little Free Zine Library</a>.
+  </p>
+
+  <p style="margin-top: 12px;">
+    This is a shared archive of class memories and ephemera. If you're pictured here and want something removed or redacted, just reach out and I'll take care of it.
+  </p>
+
+  <p style="margin-top: 12px;">
+    <button onclick="navigator.clipboard.writeText('ardenthira@proton.me')" style="font-family: monospace; cursor: pointer; background: #ff8c00; color: #fff; border: 1px solid #4169e1; padding: 2px 8px;">
+      copy contact email
+    </button>
+  </p>
+</footer>
+</body>
+</html>
