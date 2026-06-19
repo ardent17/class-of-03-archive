@@ -1,0 +1,58 @@
+# CCHS Class of 2003 — Digital Yearbook Archive
+
+A retro, single-page web archive for browsing and reading class yearbooks and ephemera right in the browser. No backend, no build step — just an HTML file, your PDFs, and pure Y2K nostalgia.
+
+## ✨ Features
+
+- 📖 **In-browser PDF reader** — Click any cover to flip through the full document via [PDF.js](https://mozilla.github.io/pdf.js/). No downloads required.
+- 🖼️ **Auto-generated covers** — Renders the PDF's first page as its shelf cover automatically. Optional `cover_url` override per item.
+- 📚 **Organized shelves** — Items grouped into customizable categories (`Yearbooks`, `Other Media`, etc.) with descriptions and “empty shelf” states.
+- 🔍 **Full reader toolbar**
+  - Page navigation (`Prev` / `Next`) with live page count
+  - Zoom in / out + Fit to Screen
+  - 90° rotation for sideways scans
+  - One-click Save PDF download link
+- 🎨 **Retro aesthetic** — VT323 + Comic Sans, dashed borders, drop shadows, scrolling `<marquee>`, checkerboard background, and a glitter mouse trail.
+- 🪧 **Interactive shelf** — Covers sit at random tilt angles and zoom up on hover for a tactile, browsable feel.
+- 💬 **Community guestbook** — Embedded live chat (“Sign the Yearbook”) for classmates to reconnect and share memories.
+- 🔒 **Privacy-conscious** — `noindex, nofollow` meta tag, plus a built-in contact button that copies an email address to the clipboard for redaction/removal requests.
+- ⚡ **Zero dependencies to host** — Static HTML; drop it on Neocities, GitHub Pages, or any static host. Just edit the `ZINES` array to add content.
+
+## 🚀 Quick Start
+
+1. Drop your PDFs into a `files/` folder next to the HTML file.
+2. Edit the `ZINES` array:
+
+```js
+const ZINES = [
+  {
+    title: "2003 Yearbook",
+    author: "CCHS",
+    category: "Yearbooks",
+    pdf_url: "files/2003.pdf"
+  },
+];
+```
+
+3. Optional: adjust categories to add or rename shelves.
+4. Open locally or upload to your host — done.
+
+Each entry supports: `title`, `author`, `category`, `pdf_url`, optional `color` (loading fallback), and optional `cover_url` (custom cover).
+
+## 📝 TODO / Future Updates
+
+- Searchable index — Search/filter by title, author, year, and keyword across all artifacts.
+- Additional yearbooks — Add more class years and editions as scans become available.
+- More artifacts & ephemera — Prom programs, playbills, newspapers, sports programs, flyers, and other memorabilia.
+- Full-text search inside PDFs — Leverage PDF.js text layers for in-document searching.
+- Tagging & filtering — Filter shelves by tags (`sports`, `clubs`, `events`, etc.).
+- Thumbnail caching — Cache generated covers to speed up repeat loads.
+- Mobile reader polish — Improved touch gestures (swipe to turn pages, pinch-to-zoom).
+- Deep links — Shareable URLs that open a specific artifact or page.
+- Accessibility pass — Keyboard navigation, ARIA labels, and a reduced-motion option for the glitter trail.
+
+## 🙏 Credits
+
+Built for the CCHS Class of 2003 as a community archive project. Engine adapted from the [Little Free Zine Library](https://littlefreezinelibrary.neocities.org/local).
+
+This is a shared archive of class memories and ephemera. If you're pictured and want something removed or redacted, reach out via the contact button on the page.
