@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex, nofollow">
 <link rel="icon" type="image/jpeg" href="images/mascot.png">
-<title>CCHS Class of 2003</title>
+<title>CCHS Class of 2003 Community Archive</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
 
@@ -115,9 +115,10 @@ footer a { color: #f7f8f9; text-decoration: underline; }
   </header>
 
   <p class="intro">Welcome Seahawk!<br><br> This is a community archive project: 
-  a place to gather yearbooks, school papers, flyers, photos, and memories. <br><br>
-  If you have something you'd like to contribute, find my contact info at the bottom of the page.
- </p>
+  a place to gather yearbooks, school papers, flyers, photos, and memories.
+  Everything here is available free of charge, and always will be. <br><br>
+  Alumni contributions welcome! Contact info at the bottom of the page.
+  </p>
 
   <div id="shelves-container"></div>
 
@@ -128,11 +129,6 @@ footer a { color: #f7f8f9; text-decoration: underline; }
     </p>
     <iframe src="https://iframe.chat/embed?chat=classof03" id="chattable" title="Class of 2003 Community Chat"></iframe>
   </div>
-
-  <footer>
-    <p>Built for the CCHS Class of 2003. Engine adapted from the
-      <a href="https://littlefreezinelibrary.neocities.org/local" target="_blank">Little Free Zine Library</a>.</p>
-  </footer>
 
 </div>
 
@@ -364,24 +360,45 @@ loadLibrary();
 <footer>
   <p>
     Built by alumna 
-    <a href="https://www.linkedin.com/in/ardenthira/" target="_blank" rel="noopener noreferrer"> Arden Thira</a> for the CCHS Class of 2003. <br> Everything here is available free of charge and always will be.
+    <a href="https://www.linkedin.com/in/ardenthira/" target="_blank" rel="noopener noreferrer"> Arden Thira</a> for the CCHS Class of 2003.
   </p>
 
-  <p>Engine adapted from the
-    <a href="https://littlefreezinelibrary.neocities.org/local" target="_blank" rel="noopener noreferrer">Little Free Zine Library</a>. 
-    Find the source code and planned updates
-    <a href="https://github.com/ardent17/class-of-03-archive" target="_blank" rel="noopener noreferrer"> here</a>.
-  </p>
-
-  <p style="margin-top: 12px;">
-    Takedown Requests: The goal is to preserve this history with care and respect for the people in it.<br> If you're pictured here and want something removed or redacted, just reach out and I'll take care of it.
+  <p> View the
+    <a href="https://github.com/ardent17/class-of-03-archive" target="_blank" rel="noopener noreferrer"> source code and planned updates</a> on Github.
   </p>
 
   <p style="margin-top: 12px;">
-    <button onclick="navigator.clipboard.writeText('ardenthira@proton.me')" style="font-family: monospace; cursor: pointer; background: #ff8c00; color: #fff; border: 1px solid #4169e1; padding: 2px 8px;">
-      copy contact email
+    Takedown Requests: If you're pictured here and want something removed or redacted, just reach out and I'll take care of it.
+  </p>
+  
+  <p style="margin-top: 12px;"> 
+    <!-- Added a 2px outset border and a solid 2px black drop shadow for that perfect 2000s UI feel -->
+    <button onclick="copyEmail()" style="font-family: monospace; cursor: pointer; background: #ff8c00; color: #fff; border: 2px outset #ff8c00; box-shadow: 2px 2px 0px #000; padding: 2px 8px;"> 
+      copy contact email 
     </button>
+  
+    <span id="copy-message" style="margin-left: 10px; color: rgb(249, 250, 249); font-family: monospace; display: none;">
+    email copied!
+    </span>
   </p>
+
+<script>
+function copyEmail() {
+  // 1. Copy the email to the clipboard
+  navigator.clipboard.writeText('ardenthira@proton.me');
+  
+  // 2. Find the hidden text element
+  const message = document.getElementById('copy-message');
+  
+  // 3. Make the text visible
+  message.style.display = 'inline';
+  
+  // 4. Hide the text again after 2 seconds
+  setTimeout(() => {
+    message.style.display = 'none';
+  }, 2000);
+}
+</script>
 </footer>
 </body>
 </html>

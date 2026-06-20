@@ -1,6 +1,6 @@
-# CCHS Class of 2003 — Digital Yearbook Archive
+# CCHS Class of 2003 — Digital Archive
 
-A retro, single-page web archive for browsing and reading class yearbooks and ephemera right in the browser. No backend, no build step — just an HTML file, your PDFs, and pure Y2K nostalgia.
+A retro, single-page web archive for browsing and reading class yearbooks and ephemera right in the browser. No backend, no build step — just vanilla JS, static HTML, and pure Y2K nostalgia.
 
 ## ✨ Features
 
@@ -15,7 +15,7 @@ A retro, single-page web archive for browsing and reading class yearbooks and ep
   - One-click Save PDF download link
 - 🎨 Retro aesthetic — VT323 + Comic Sans, dashed borders, drop shadows, scrolling `<marquee>`, checkerboard background, and a glitter mouse trail.
 - 🪧 Interactive shelf — Covers sit at random tilt angles and zoom up on hover for a tactile, browsable feel.
-- 💬 Community guestbook — Embedded live chat ("Sign the Yearbook") for classmates to reconnect and share memories.
+- 💬 Community guestbook — Embedded Chattable live chat ("Sign the Yearbook") for classmates to reconnect and share memories.
 - 🔒 Privacy-conscious — `noindex, nofollow` meta tag, plus a built-in contact button (copies email to clipboard) for redaction/removal requests.
 - ⚡ Zero dependencies to host — Static HTML; drop it on Neocities, GitHub Pages, or any static host. Just edit the `BOOKS` array to add content.
 
