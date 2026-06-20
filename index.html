@@ -55,25 +55,25 @@ marquee { background: #ff8c00; color: #fff; font-weight: bold; padding: 5px; bor
 
 .shelf { background: #8b5a2b; border-bottom: 15px solid #5c3a18; padding: 15px 10px 0 10px; display: flex; gap: 15px; flex-wrap: wrap; box-shadow: 0px 5px 10px rgba(0,0,0,0.5); min-height: 140px; align-items: flex-end; }
 
-.zine {
+.book {
   height: 140px; width: auto; min-width: 80px;
   background: #fff; border: 1px solid #000; box-shadow: -3px 3px 5px rgba(0,0,0,0.3);
   display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;
   cursor: pointer; transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
   position: relative; overflow: hidden; box-sizing: border-box; transform-origin: bottom center;
 }
-.zine::before { content: ''; position: absolute; left: 2px; top: 0; bottom: 0; width: 4px; background: rgba(0,0,0,0.2); border-left: 1px dashed rgba(255,255,255,0.4); z-index: 5; pointer-events: none; }
-.zine:hover { transform: scale(2.5) translateY(-5px) rotate(0deg) !important; z-index: 1000 !important; box-shadow: -15px 15px 25px rgba(0,0,0,0.8) !important; }
+.book::before { content: ''; position: absolute; left: 2px; top: 0; bottom: 0; width: 4px; background: rgba(0,0,0,0.2); border-left: 1px dashed rgba(255,255,255,0.4); z-index: 5; pointer-events: none; }
+.book:hover { transform: scale(2.5) translateY(-5px) rotate(0deg) !important; z-index: 1000 !important; box-shadow: -15px 15px 25px rgba(0,0,0,0.8) !important; }
 
-.zine-cover-img { height: 140px; width: auto; object-fit: contain; display: block; position: relative; z-index: 1; }
-.zine-text-wrapper { padding: 10px; display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100%; width: 100px; box-sizing: border-box; z-index: 2; }
-.zine-title { font-size: 13px; font-weight: bold; margin-bottom: 5px; z-index: 2; position: relative; }
-.zine-author { font-size: 11px; color: #333; z-index: 2; position: relative; }
+.book-cover-img { height: 140px; width: auto; object-fit: contain; display: block; position: relative; z-index: 1; }
+.book-text-wrapper { padding: 10px; display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100%; width: 100px; box-sizing: border-box; z-index: 2; }
+.book-title { font-size: 13px; font-weight: bold; margin-bottom: 5px; z-index: 2; position: relative; }
+.book-author { font-size: 11px; color: #333; z-index: 2; position: relative; }
 
 .community-wall { margin-top: 40px; border-top: 3px double #4169e1; padding-top: 20px; }
 #chattable { width: 100%; height: 350px; border: 4px dashed #ff8c00; background: #ffffff; box-shadow: 6px 6px 0px #4169e1; box-sizing: border-box; }
 
-#zine-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.9); z-index: 10000; justify-content: center; align-items: center; }
+#book-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.9); z-index: 10000; justify-content: center; align-items: center; }
 .modal-content { background: #fff; width: 95%; max-width: 1200px; height: 95%; border: 5px double #4169e1; padding: 0; position: relative; font-family: 'Courier New', Courier, monospace; display: flex; flex-direction: column; overflow: hidden; }
 
 .modal-toolbar { display: flex; justify-content: space-between; align-items: center; background: #1a2a5e; color: #fff; padding: 5px 15px; border-bottom: 2px solid #ff8c00; font-family: 'VT323', monospace; flex-wrap: wrap; gap: 10px; }
@@ -89,7 +89,7 @@ marquee { background: #ff8c00; color: #fff; font-weight: bold; padding: 5px; bor
 .download-link:hover { background: #ff8c00; color: white; }
 .close-btn { background: #d11; color: white; border: 2px outset #fff; cursor: pointer; font-weight: bold; padding: 2px 10px; font-family: 'VT323', monospace; font-size: 1.2em; }
 
-#zine-reader { display: flex; flex-direction: column; align-items: flex-start; justify-content: flex-start; flex-grow: 1; overflow: auto; background: #222; padding: 10px; border: none; }
+#book-reader { display: flex; flex-direction: column; align-items: flex-start; justify-content: flex-start; flex-grow: 1; overflow: auto; background: #222; padding: 10px; border: none; }
 #pdf-canvas { background: white; box-shadow: 5px 5px 15px rgba(0,0,0,0.8); border: 1px solid #000; margin: auto; }
 .fit-to-screen { max-width: 100%; max-height: 100%; object-fit: contain; }
 
@@ -110,11 +110,14 @@ footer a { color: #f7f8f9; text-decoration: underline; }
 <div id="container">
 
   <header>
-    <h1>[ CCHS Class of 2003 ]</h1>
-    <marquee scrollamount="5">Welcome! Click any cover to flip through it right in your browser.</marquee>
+    <h1>[ CCHS Class of 2003 Community Archive ]</h1>
+    <marquee scrollamount="5">🦅 Click any cover to flip through it right in your browser. 🦅 </marquee>
   </header>
 
-  <p class="intro">Click a cover to open it!</p>
+  <p class="intro">Welcome Seahawk!<br><br> This is a community archive project: 
+  a place to gather yearbooks, school papers, flyers, photos, and memories. <br><br>
+  If you have something you'd like to contribute, find my contact info at the bottom of the page.
+ </p>
 
   <div id="shelves-container"></div>
 
@@ -133,7 +136,7 @@ footer a { color: #f7f8f9; text-decoration: underline; }
 
 </div>
 
-<div id="zine-modal">
+<div id="book-modal">
   <div class="modal-content">
     <div class="modal-toolbar">
       <div class="toolbar-group">
@@ -156,7 +159,7 @@ footer a { color: #f7f8f9; text-decoration: underline; }
         <button class="close-btn" onclick="closeModal()">[X] CLOSE</button>
       </div>
     </div>
-    <div id="zine-reader">
+    <div id="book-reader">
       <canvas id="pdf-canvas" class="fit-to-screen"></canvas>
     </div>
   </div>
@@ -171,7 +174,7 @@ function escapeHTML(str) {
 }
 
 /* =========================================
-=== YOUR LIBRARY — EDIT THIS LIST ===
+=== LIBRARY  ===
 =========================================
    Each entry needs:
      title    - displayed name
@@ -185,7 +188,7 @@ function escapeHTML(str) {
    pdf_url MUST point to a real file. If your PDFs are in a "files"
    folder next to this page, use "files/yearbook-2003.pdf" etc.
 */
-const ZINES = [
+const BOOKS = [
   { title: "2002 Yearbook", author: "CCHS", category: "Yearbooks", pdf_url: "files/2002nowandthen.pdf" },
   // { title: "Prom Program", author: "CCHS", category: "Other", pdf_url: "files/prom.pdf" },
 ];
@@ -201,7 +204,7 @@ function loadLibrary() {
   container.innerHTML = '';
 
   categories.forEach(cat => {
-    const itemsInCat = ZINES.filter(z => z.category === cat.id);
+    const itemsInCat = BOOKS.filter(z => z.category === cat.id);
 
     const catWrapper = document.createElement('div');
     catWrapper.className = 'category-container';
@@ -216,24 +219,24 @@ function loadLibrary() {
     if (itemsInCat.length === 0) {
       shelf.innerHTML = `<span style="color:#fff; font-family:monospace;">( Shelf is empty )</span>`;
     } else {
-      itemsInCat.forEach(zine => {
+      itemsInCat.forEach(book => {
         const zElement = document.createElement('div');
-        zElement.className = 'zine';
-        zElement.style.backgroundColor = zine.color || '#ffffff';
+        zElement.className = 'book';
+        zElement.style.backgroundColor = book.color || '#ffffff';
         zElement.style.transform = `rotate(${Math.floor(Math.random() * 10) - 5}deg)`;
 
-        if (zine.cover_url) {
+        if (book.cover_url) {
           // Manual cover image override
-          zElement.innerHTML = `<img src="${escapeHTML(zine.cover_url)}" class="zine-cover-img" alt="Cover">`;
+          zElement.innerHTML = `<img src="${escapeHTML(book.cover_url)}" class="book-cover-img" alt="Cover">`;
         } else {
           // Auto-generate the cover from the PDF's first page
           const thumb = document.createElement('canvas');
-          thumb.className = 'zine-cover-img';
+          thumb.className = 'book-cover-img';
           zElement.appendChild(thumb);
-          renderThumbnail(zine, thumb, zElement);
+          renderThumbnail(book, thumb, zElement);
         }
 
-        zElement.onclick = () => openModal(zine);
+        zElement.onclick = () => openModal(book);
         shelf.appendChild(zElement);
       });
     }
@@ -244,8 +247,8 @@ function loadLibrary() {
 }
 
 // --- Draw a PDF's first page onto a small canvas as its cover ---
-function renderThumbnail(zine, canvasEl, zElement) {
-  pdfjsLib.getDocument(zine.pdf_url).promise
+function renderThumbnail(book, canvasEl, zElement) {
+  pdfjsLib.getDocument(book.pdf_url).promise
     .then(pdf => pdf.getPage(1))
     .then(page => {
       const base = page.getViewport({ scale: 1 });
@@ -256,12 +259,12 @@ function renderThumbnail(zine, canvasEl, zElement) {
       return page.render({ canvasContext: canvasEl.getContext('2d'), viewport }).promise;
     })
     .catch(err => {
-      console.error("Couldn't render cover for:", zine.title, "->", zine.pdf_url, err);
+      console.error("Couldn't render cover for:", book.title, "->", book.pdf_url, err);
       // Fallback to a text cover so the shelf is never blank
       zElement.innerHTML = `
-        <div class="zine-text-wrapper">
-          <div class="zine-title">${escapeHTML(zine.title)}</div>
-          <div class="zine-author">by ${escapeHTML(zine.author)}</div>
+        <div class="book-text-wrapper">
+          <div class="book-title">${escapeHTML(book.title)}</div>
+          <div class="book-author">by ${escapeHTML(book.author)}</div>
         </div>`;
     });
 }
@@ -297,11 +300,11 @@ function zoomOut() { canvas.classList.remove('fit-to-screen'); if (basePdfScale 
 function resetZoom() { canvas.classList.add('fit-to-screen'); basePdfScale = 2.0; queueRenderPage(pageNum); }
 function rotateZine() { currentRotation = (currentRotation + 90) % 360; queueRenderPage(pageNum); }
 
-function openModal(zine) {
-  document.getElementById('modal-title').innerText = zine.title;
-  document.getElementById('modal-author').innerText = zine.author;
-  document.getElementById('modal-download-btn').href = zine.pdf_url;
-  document.getElementById('zine-modal').style.display = 'flex';
+function openModal(book) {
+  document.getElementById('modal-title').innerText = book.title;
+  document.getElementById('modal-author').innerText = book.author;
+  document.getElementById('modal-download-btn').href = book.pdf_url;
+  document.getElementById('book-modal').style.display = 'flex';
 
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   currentRotation = 0;
@@ -312,19 +315,19 @@ function openModal(zine) {
   document.getElementById('prev-page').disabled = true;
   document.getElementById('next-page').disabled = true;
 
-  pdfjsLib.getDocument(zine.pdf_url).promise.then(loadedDoc => {
+  pdfjsLib.getDocument(book.pdf_url).promise.then(loadedDoc => {
     pdfDoc = loadedDoc;
     document.getElementById('page-count').textContent = pdfDoc.numPages;
     pageNum = 1;
     renderPage(pageNum);
   }).catch(err => {
-    console.error("Error loading PDF:", zine.pdf_url, err);
-    alert("That file couldn't be loaded. Check the pdf_url path:\n" + zine.pdf_url);
+    console.error("Error loading PDF:", book.pdf_url, err);
+    alert("That file couldn't be loaded. Check the pdf_url path:\n" + book.pdf_url);
   });
 }
 
 function closeModal() {
-  document.getElementById('zine-modal').style.display = 'none';
+  document.getElementById('book-modal').style.display = 'none';
   pdfDoc = null;
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 }
@@ -360,13 +363,18 @@ loadLibrary();
 
 <footer>
   <p>
-    Built for the CCHS Class of 2003 as a community archive project.
-    Engine adapted from the
-    <a href="https://littlefreezinelibrary.neocities.org/local" target="_blank" rel="noopener noreferrer">Little Free Zine Library</a>.
+    Built by alumna 
+    <a href="https://www.linkedin.com/in/ardenthira/" target="_blank" rel="noopener noreferrer"> Arden Thira</a> for the CCHS Class of 2003. <br> Everything here is available free of charge and always will be.
+  </p>
+
+  <p>Engine adapted from the
+    <a href="https://littlefreezinelibrary.neocities.org/local" target="_blank" rel="noopener noreferrer">Little Free Zine Library</a>. 
+    Find the source code and planned updates
+    <a href="https://github.com/ardent17/class-of-03-archive" target="_blank" rel="noopener noreferrer"> here</a>.
   </p>
 
   <p style="margin-top: 12px;">
-    This is a shared archive of class memories and ephemera. If you're pictured here and want something removed or redacted, just reach out and I'll take care of it.
+    Takedown Requests: The goal is to preserve this history with care and respect for the people in it.<br> If you're pictured here and want something removed or redacted, just reach out and I'll take care of it.
   </p>
 
   <p style="margin-top: 12px;">
