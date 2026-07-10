@@ -194,6 +194,9 @@ const categories = [
   { id: "Other",     name: "Other Media", desc: "Coming soon!" }
 ];
 
+// Global dictionary to cache preloaded PDF promises
+const preloadedPDFs = {};
+
 // --- Render the shelves ---
 function loadLibrary() {
   const container = document.getElementById('shelves-container');
@@ -234,6 +237,10 @@ function loadLibrary() {
 
         zElement.onclick = () => openModal(book);
         shelf.appendChild(zElement);
+
+        if (!preloadedPDFs[book.pdf_url]) {
+          preloadedPDFs[book.pdf_url] = pdfjsLib.getDocument(book.pdf_url).promise;
+        }
       });
     }
 
@@ -241,6 +248,7 @@ function loadLibrary() {
     container.appendChild(catWrapper);
   });
 }
+
 
 // --- Draw a PDF's first page onto a small canvas as its cover ---
 function renderThumbnail(book, canvasEl, zElement) {
@@ -311,7 +319,10 @@ function openModal(book) {
   document.getElementById('prev-page').disabled = true;
   document.getElementById('next-page').disabled = true;
 
-  pdfjsLib.getDocument(book.pdf_url).promise.then(loadedDoc => {
+    // --- REPLACE THE ORIGINAL pdfjsLib LINE WITH THIS ---
+  const pdfPromise = preloadedPDFs[book.pdf_url] || pdfjsLib.getDocument(book.pdf_url).promise;
+
+  pdfPromise.then(loadedDoc => {
     pdfDoc = loadedDoc;
     document.getElementById('page-count').textContent = pdfDoc.numPages;
     pageNum = 1;
