@@ -81,7 +81,7 @@ marquee { background: #ff8c00; color: #fff; font-weight: bold; padding: 5px; bor
 .t-title { font-size: 1.5em; font-weight: bold; color: #ff8c00; text-shadow: 1px 1px #000; }
 .t-author { font-size: 1.2em; color: #ccc; }
 
-.page-btn { background: #4169e1; color: white; border: 2px outset #8aa3f0; font-family: 'VT323', monospace; font-size: 1.2em; cursor: pointer; padding: 2px 10px; }
+.page-btn { background: #4169e1; color: white; border: 2px outset #8aa3f0; font-family: 'VT323', monospace; font-size: 1em; cursor: pointer; padding: 2px 10px; }
 .page-btn:active { border-style: inset; background: #2f4fc0; }
 .page-btn:disabled { background: #555; border-color: #777; color: #aaa; cursor: not-allowed; }
 #page-info { font-family: 'VT323', monospace; font-size: 1.2em; color: #ff8c00; background: #111; padding: 2px 10px; border: 1px solid #ff8c00; }
@@ -146,14 +146,14 @@ footer a { color: #f7f8f9; text-decoration: underline; }
         <button class="page-btn" onclick="rotateZine()" title="Rotate 90°">↻</button>
       </div>
       <div class="toolbar-group">
-        <button class="page-btn" id="prev-page" onclick="goPrevPage()">◀ PREV</button>
+        <button class="page-btn" id="prev-page" onclick="goPrevPage()" >◀ PREV (Left arrow)</button>
         <div id="page-info" style="display: inline-flex; align-items: center; gap: 5px; background: #111; padding: 2px 10px; border: 1px solid #ff8c00; font-family: 'VT323', monospace; font-size: 1.2em; color: #ff8c00;">
     PAGE 
         <input type="number" id="page-num-input" value="1" min="1" style="background: #222; color: #ff8c00; border: 1px dashed #ff8c00; width: 50px; font-family: 'VT323', monospace; font-size: 1em; text-align: center; outline: none;" onchange="jumpToPage(this.value)"> 
      /  <span id="page-count">?</span>
       </div>
-  <button class="page-btn" id="next-page" onclick="goNextPage()">NEXT ▶</button>
-  <button class="page-btn" id="read-back-btn" style="background: #ff8c00; border-color: #ffa733; margin-left: 10px;">START FROM BACK ↻</button>
+  <button class="page-btn" id="next-page" onclick="goNextPage()">NEXT ▶ (Right arrow)</button>
+  <button class="page-btn" id="read-back-btn" style="background: #ff8c00; border-color: #ffa733; margin-left: 10px;">LAST PAGE  ↻</button>
   <a id="modal-download-btn" class="download-link" download>DOWNLOAD</a>
 </div>
 
@@ -347,6 +347,23 @@ function openModal(book, startFromBack = false) {
       queueRenderPage(pageNum);
     }
   };
+
+  document.addEventListener('keydown', (e) => {
+  const modalOpen = document.getElementById('book-modal').style.display === 'flex';
+  const typing = ['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName);
+
+  if (!modalOpen || typing) return;
+
+  if (e.key === 'ArrowLeft') {
+    e.preventDefault();
+    goPrevPage();
+  }
+
+  if (e.key === 'ArrowRight') {
+    e.preventDefault();
+    goNextPage();
+  }
+});
 
   const pdfPromise = preloadedPDFs[book.pdf_url] || pdfjsLib.getDocument(book.pdf_url).promise;
 
