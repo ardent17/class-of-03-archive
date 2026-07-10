@@ -9,7 +9,7 @@ A retro, single-page web archive for browsing and reading class yearbooks and ep
 - 🖼️ Auto-generated covers — Renders the PDF's first page as its shelf cover automatically. Optional manual `cover_url` override per item.
 - 📚 Organized shelves — Items grouped into customizable categories (`Yearbooks`, `Other Media`, etc.) with descriptions and “empty shelf” states.
 - 🔍 Full reader toolbar:
-  - Page navigation (`Prev` / `Next`) with live page count
+  - Page navigation (`Prev` / `Next`), direct page jump, live page count, and “From Back” start option
   - Zoom in / out + Fit to Screen
   - 90° rotation for sideways scans
   - One-click Save PDF download link
@@ -40,7 +40,6 @@ Each entry supports: `title`, `author`, `category`, `pdf_url`, optional `color` 
 ## 📝 TODO / Future Updates
 
 - Searchable index — Search/filter by title, author, year, and keyword across all artifacts.
-- Improved navigation - Start browsing from either direction or open directly to a specific page.
 - Additional yearbooks — Add more class years and editions as scans become available.
 - More artifacts & ephemera — Prom programs, playbills, newspapers, sports programs, flyers, and other memorabilia.
 - Full-text search inside PDFs — Leverage PDF.js text layers for in-document searching.

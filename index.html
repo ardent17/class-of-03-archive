@@ -140,20 +140,23 @@ footer a { color: #f7f8f9; text-decoration: underline; }
         <span class="t-author">by <span id="modal-author">Author</span></span>
       </div>
       <div class="toolbar-group">
-        <button class="page-btn" id="prev-page" onclick="goPrevPage()">◀ PREV</button>
-        <span id="page-info">PAGE <span id="page-num">1</span> / <span id="page-count">?</span></span>
-        <button class="page-btn" id="next-page" onclick="goNextPage()">NEXT ▶</button>
-      </div>
-      <div class="toolbar-group">
         <button class="page-btn" onclick="zoomOut()" title="Zoom Out">🔍-</button>
         <button class="page-btn" onclick="resetZoom()" title="Fit to Screen">FIT</button>
         <button class="page-btn" onclick="zoomIn()" title="Zoom In">🔍+</button>
         <button class="page-btn" onclick="rotateZine()" title="Rotate 90°">↻</button>
       </div>
       <div class="toolbar-group">
-        <a id="modal-download-btn" class="download-link" href="#" target="_blank" download>[💾 SAVE PDF]</a>
-        <button class="close-btn" onclick="closeModal()">[X] CLOSE</button>
+        <button class="page-btn" id="prev-page" onclick="goPrevPage()">◀ PREV</button>
+        <div id="page-info" style="display: inline-flex; align-items: center; gap: 5px; background: #111; padding: 2px 10px; border: 1px solid #ff8c00; font-family: 'VT323', monospace; font-size: 1.2em; color: #ff8c00;">
+    PAGE 
+        <input type="number" id="page-num-input" value="1" min="1" style="background: #222; color: #ff8c00; border: 1px dashed #ff8c00; width: 50px; font-family: 'VT323', monospace; font-size: 1em; text-align: center; outline: none;" onchange="jumpToPage(this.value)"> 
+     /  <span id="page-count">?</span>
       </div>
+  <button class="page-btn" id="next-page" onclick="goNextPage()">NEXT ▶</button>
+  <button class="page-btn" id="read-back-btn" style="background: #ff8c00; border-color: #ffa733; margin-left: 10px;">START FROM BACK ↻</button>
+  <a id="modal-download-btn" class="download-link" download>DOWNLOAD</a>
+</div>
+
     </div>
     <div id="book-reader">
       <canvas id="pdf-canvas" class="fit-to-screen"></canvas>
@@ -235,7 +238,13 @@ function loadLibrary() {
           renderThumbnail(book, thumb, zElement);
         }
 
-        zElement.onclick = () => openModal(book);
+        // Default click loads from front
+
+        // If they right-click or long-press the book cover, they can trigger starting from the back
+                // Clean, simple single-click back to normal
+        zElement.onclick = () => openModal(book, false);
+        zElement.oncontextmenu = null; // Clears any broken right-click logic
+        
         shelf.appendChild(zElement);
 
         if (!preloadedPDFs[book.pdf_url]) {
@@ -290,12 +299,24 @@ function renderPage(num) {
       if (pageNumIsPending !== null) { renderPage(pageNumIsPending); pageNumIsPending = null; }
     });
   });
-  document.getElementById('page-num').textContent = num;
+  // Keep both the input counter value and disabled states unified
+  document.getElementById('page-num-input').value = num;
   document.getElementById('prev-page').disabled = num <= 1;
   document.getElementById('next-page').disabled = num >= pdfDoc.numPages;
 }
 
 function queueRenderPage(num) { if (pageIsRendering) pageNumIsPending = num; else renderPage(num); }
+function jumpToPage(val) {
+  let targetPage = parseInt(val, 10);
+  if (isNaN(targetPage)) return;
+  
+  // Boundary check safety catches
+  if (targetPage < 1) targetPage = 1;
+  if (pdfDoc && targetPage > pdfDoc.numPages) targetPage = pdfDoc.numPages;
+  
+  pageNum = targetPage;
+  queueRenderPage(pageNum);
+}
 function goPrevPage() { if (pageNum <= 1) return; pageNum--; queueRenderPage(pageNum); }
 function goNextPage() { if (pageNum >= pdfDoc.numPages) return; pageNum++; queueRenderPage(pageNum); }
 
@@ -304,7 +325,7 @@ function zoomOut() { canvas.classList.remove('fit-to-screen'); if (basePdfScale 
 function resetZoom() { canvas.classList.add('fit-to-screen'); basePdfScale = 2.0; queueRenderPage(pageNum); }
 function rotateZine() { currentRotation = (currentRotation + 90) % 360; queueRenderPage(pageNum); }
 
-function openModal(book) {
+function openModal(book, startFromBack = false) {
   document.getElementById('modal-title').innerText = book.title;
   document.getElementById('modal-author').innerText = book.author;
   document.getElementById('modal-download-btn').href = book.pdf_url;
@@ -314,18 +335,27 @@ function openModal(book) {
   currentRotation = 0;
   basePdfScale = 2.0;
   canvas.classList.add('fit-to-screen');
-  document.getElementById('page-num').textContent = "1";
+  document.getElementById('page-num-input').value = "1";
   document.getElementById('page-count').textContent = "?";
   document.getElementById('prev-page').disabled = true;
   document.getElementById('next-page').disabled = true;
 
-    // --- REPLACE THE ORIGINAL pdfjsLib LINE WITH THIS ---
+  // Bind the UI button dynamically to flip explicitly to the last page index
+  document.getElementById('read-back-btn').onclick = () => {
+    if (pdfDoc) {
+      pageNum = pdfDoc.numPages;
+      queueRenderPage(pageNum);
+    }
+  };
+
   const pdfPromise = preloadedPDFs[book.pdf_url] || pdfjsLib.getDocument(book.pdf_url).promise;
 
   pdfPromise.then(loadedDoc => {
     pdfDoc = loadedDoc;
     document.getElementById('page-count').textContent = pdfDoc.numPages;
-    pageNum = 1;
+    
+    // Automatically set page number index based on user entry choice
+    pageNum = startFromBack ? pdfDoc.numPages : 1;
     renderPage(pageNum);
   }).catch(err => {
     console.error("Error loading PDF:", book.pdf_url, err);
