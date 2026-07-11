@@ -191,6 +191,7 @@ function escapeHTML(str) {
    pdf_url MUST point to a real file. If your PDFs are in a "files"
    folder next to this page, use "files/yearbook-2003.pdf" etc.
 */
+
 const BOOKS = [
   { title: "2002 Yearbook", author: "CCHS", category: "Yearbooks", pdf_url: "files/2002nowandthen.pdf", cover_url: "images/cover.jpg",
     sections: [
@@ -370,22 +371,10 @@ function openFromURL() {
   const book = BOOKS.find(book => book.pdf_url === pdfUrl);
   if (!book) return;
 
-  openModal(book);
-
-  const waitForPDF = setInterval(() => {
-    if (!pdfDoc) return;
-    clearInterval(waitForPDF);
-
-    if (Number.isInteger(requestedPage) &&
-        requestedPage >= 1 &&
-        requestedPage <= pdfDoc.numPages) {
-      pageNum = requestedPage;
-      renderPage(pageNum);
-    }
-  }, 50);
+  openModal(book, false, requestedPage);
 }
 
-function openModal(book, startFromBack = false) {
+function openModal(book, startFromBack = false, requestedPage = null) {
   currentBook = book;
   populateSectionPicker(book);
   document.getElementById('modal-title').innerText = book.title;
@@ -401,34 +390,26 @@ function openModal(book, startFromBack = false) {
   document.getElementById('page-count').textContent = "?";
   document.getElementById('prev-page').disabled = true;
   document.getElementById('next-page').disabled = true;
+  document.getElementById('section-picker').value = '';
 
   const pdfPromise = preloadedPDFs[book.pdf_url] || pdfjsLib.getDocument(book.pdf_url).promise;
 
   pdfPromise.then(loadedDoc => {
     pdfDoc = loadedDoc;
     document.getElementById('page-count').textContent = pdfDoc.numPages;
-    pageNum = startFromBack ? pdfDoc.numPages : 1;
+
+    if (Number.isInteger(requestedPage) && requestedPage >= 1 && requestedPage <= pdfDoc.numPages) {
+      pageNum = requestedPage;
+    } else {
+      pageNum = startFromBack ? pdfDoc.numPages : 1;
+    }
+
     renderPage(pageNum);
   }).catch(err => {
     console.error("Error loading PDF:", book.pdf_url, err);
     alert("That file couldn't be loaded. Check the pdf_url path:\n" + book.pdf_url);
   });
 }
-
-// function populateSectionPicker(book) {
-//   const picker = document.getElementById('section-picker');
-//   picker.innerHTML = '<option value="">SECTION</option>';
-
-//   const sections = BOOK_SECTIONS[book.pdf_url] || [];
-//   sections.forEach(section => {
-//     const option = document.createElement('option');
-//     option.value = section.page;
-//     option.textContent = section.label;
-//     picker.appendChild(option);
-//   });
-
-//   picker.disabled = sections.length === 0;
-// }
 
 function populateSectionPicker(book) {
   const picker = document.getElementById('section-picker');
