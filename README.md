@@ -11,6 +11,7 @@ A retro, single-page web archive for browsing and reading class yearbooks and ep
   - Page navigation (`Prev` / `Next`), direct page jump, live page count, and Sections dropdown menu
   - Zoom in / out + Fit to Screen
   - One-click download link
+  - Deep links for individual pages
 - 🎨 Retro aesthetic — VT323 + Comic Sans, dashed borders, drop shadows, scrolling `<marquee>`, checkerboard background, and a glitter mouse trail.
 - 🪧 Interactive shelf — Covers sit at random tilt angles and zoom up on hover for a tactile, browsable feel.
 - 💬 Community guestbook — Embedded Chattable live chat ("Sign the Yearbook") for classmates to reconnect and share memories.
