@@ -154,7 +154,9 @@ footer a { color: #f7f8f9; text-decoration: underline; }
      /  <span id="page-count">?</span>
       </div>
   <button class="page-btn" id="next-page" onclick="goNextPage()">NEXT ▶</button>
-  <button class="page-btn" id="read-back-btn" style="background: #ff8c00; border-color: #ffa733; margin-left: 10px;">SECTION</button>
+  <select id="section-picker" class="download-link" onchange="jumpToSection(this.value)">
+  <option value="">SECTION</option>
+  </select>
   <button class="download-link" type="button" onclick="copyPageLink()">🔗</button>
   <a id="modal-download-btn" class="download-link" download>💾</a>
 </div>
@@ -190,8 +192,21 @@ function escapeHTML(str) {
    folder next to this page, use "files/yearbook-2003.pdf" etc.
 */
 const BOOKS = [
-  { title: "2002 Yearbook", author: "CCHS", category: "Yearbooks", pdf_url: "files/2002nowandthen.pdf", cover_url: "images/cover.jpg", },
-  // { title: "Prom Program", author: "CCHS", category: "Other", pdf_url: "files/prom.pdf" },
+  { title: "2002 Yearbook", author: "CCHS", category: "Yearbooks", pdf_url: "files/2002nowandthen.pdf", cover_url: "images/cover.jpg",
+    sections: [
+    { label: "EVENTS", page: 6 },
+    { label: "SENIORS", page: 28 },
+    { label: "JUNIORS", page: 58 },
+    { label: "SOPHOMORES", page: 76 },
+    { label: "FRESHMEN", page: 96 },
+    { label: "FACULTY", page: 120 },
+    { label: "SPORTS", page: 132 },
+    { label: "CLUBS", page: 176 },
+    { label: "9/11", page: 214 },
+    { label: "ADS", page: 217 },
+    { label: "INDEX", page: 248 }
+    ]
+  },
 ];
 
 const categories = [
@@ -372,6 +387,7 @@ function openFromURL() {
 
 function openModal(book, startFromBack = false) {
   currentBook = book;
+  populateSectionPicker(book);
   document.getElementById('modal-title').innerText = book.title;
   document.getElementById('modal-author').innerText = book.author;
   document.getElementById('modal-download-btn').href = book.pdf_url;
@@ -386,13 +402,6 @@ function openModal(book, startFromBack = false) {
   document.getElementById('prev-page').disabled = true;
   document.getElementById('next-page').disabled = true;
 
-  document.getElementById('read-back-btn').onclick = () => {
-    if (pdfDoc) {
-      pageNum = pdfDoc.numPages;
-      queueRenderPage(pageNum);
-    }
-  };
-
   const pdfPromise = preloadedPDFs[book.pdf_url] || pdfjsLib.getDocument(book.pdf_url).promise;
 
   pdfPromise.then(loadedDoc => {
@@ -404,6 +413,43 @@ function openModal(book, startFromBack = false) {
     console.error("Error loading PDF:", book.pdf_url, err);
     alert("That file couldn't be loaded. Check the pdf_url path:\n" + book.pdf_url);
   });
+}
+
+// function populateSectionPicker(book) {
+//   const picker = document.getElementById('section-picker');
+//   picker.innerHTML = '<option value="">SECTION</option>';
+
+//   const sections = BOOK_SECTIONS[book.pdf_url] || [];
+//   sections.forEach(section => {
+//     const option = document.createElement('option');
+//     option.value = section.page;
+//     option.textContent = section.label;
+//     picker.appendChild(option);
+//   });
+
+//   picker.disabled = sections.length === 0;
+// }
+
+function populateSectionPicker(book) {
+  const picker = document.getElementById('section-picker');
+  picker.innerHTML = '<option value="">SECTION</option>';
+
+  const sections = book.sections || [];
+  sections.forEach(section => {
+    const option = document.createElement('option');
+    option.value = section.page;
+    option.textContent = section.label;
+    picker.appendChild(option);
+  });
+
+  picker.disabled = sections.length === 0;
+}
+
+function jumpToSection(page) {
+  const targetPage = parseInt(page, 10);
+  if (!Number.isInteger(targetPage) || !pdfDoc) return;
+  jumpToPage(targetPage);
+  document.getElementById('section-picker').value = '';
 }
 
 function closeModal() {
