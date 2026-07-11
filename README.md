@@ -39,14 +39,12 @@ Each entry supports: `title`, `author`, `category`, `pdf_url`, optional `color` 
 
 ## 📝 TODO / Future Updates
 
-- Searchable index — Search/filter by title, author, year, and keyword across all artifacts.
 - Additional yearbooks — Add more class years and editions as scans become available.
 - More artifacts & ephemera — Prom programs, playbills, newspapers, sports programs, flyers, and other memorabilia.
-- Full-text search inside PDFs — Leverage PDF.js text layers for in-document searching.
-- Tagging & filtering — Filter shelves by tags (`sports`, `clubs`, `events`, etc.).
-- Thumbnail caching — Cache generated covers to speed up repeat loads.
-- Mobile reader polish — Improved touch gestures (swipe to turn pages, pinch-to-zoom).
 - Deep links — Shareable URLs that open a specific artifact/page.
+- Tagging & filtering — Filter book content by tags (`sports`, `clubs`, `seniors`, etc.).
+- Full-text search inside PDFs — Leverage PDF.js text layers for in-document searching.
+- Mobile reader polish — Improved touch gestures (swipe to turn pages, pinch-to-zoom).
 - Accessibility pass — Keyboard navigation, ARIA labels, reduced-motion option for the glitter trail.
 
 ## 🙏 Credits
