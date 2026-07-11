@@ -52,6 +52,9 @@ marquee { background: #ff8c00; color: #fff; font-weight: bold; padding: 5px; bor
 .category-container { margin-bottom: 40px; }
 .category-title { font-family: 'VT323', monospace; font-size: 2em; background: #4169e1; color: white; display: inline-block; padding: 0 10px; margin-bottom: 0; border: 2px solid #ff8c00; }
 .category-desc { font-family: 'Courier New', Courier, monospace; color: #4169e1; font-weight: bold; margin: 5px 0 10px 0; font-size: 14px; background: rgba(255, 140, 0, 0.15); display: inline-block; padding: 2px 5px; border: 1px dotted #ff8c00; }
+.category-desc {
+  white-space: pre-line;
+}
 
 .shelf { background: #8b5a2b; border-bottom: 15px solid #5c3a18; padding: 15px 10px 0 10px; display: flex; gap: 15px; flex-wrap: wrap; box-shadow: 0px 5px 10px rgba(0,0,0,0.5); min-height: 140px; align-items: flex-end; }
 
@@ -284,11 +287,15 @@ const BOOKS = [
       { label: "INDEX", page: 248 }
     ]
   },
+  { title: "The Seahawk's Eye", author: "CCHS", category: "Other", pdf_url: "files/seahawks-eye-dec-99.pdf", cover_url: "images/seahawk-cover-99.jpg" ,
+  },
+  { title: "The Seahawk's Eye", author: "CCHS", category: "Other", pdf_url: "files/seahawks-eye-march-01.pdf", cover_url: "images/seahawk-cover-01.jpg" ,
+  },
 ];
 
 const categories = [
-  { id: "Yearbooks", name: "Yearbooks", desc: "Class yearbooks, scanned and ready to flip through." },
-  { id: "Other", name: "Other Media", desc: "Coming soon!" }
+  { id: "Yearbooks", name: "Yearbooks", desc: "Class yearbooks, scanned and ready to flip through. Well, one yearbook. More coming soon" },
+  { id: "Other", name: "Other Media", desc: "(1) The Seahawk's Eye, December 15, 2001:\n In this final pre-Millennium issue of the Seahawk's Eye, find a brutal editor shutdown of a 27-year-old McDonald's worker, a horny holiday note about ketchup (p. 13), and an entertaining weed legalization debate between the guy you want to chill with and the girl with the best homework. Also contains a tribute to Lilli Pierce, who was a very cool girl. \n\n (2) The Seahawk's Eye, March 15, 2001:\n McDonald's returns, this time because it burned down. The Mr. Seahawk nominees want you to know they are chick magnets and aspire to be like Dirk Diggler, but ask that you please not be too picky. Someone built an Empire State building out of cans at Edison mall." }
 ];
 
 const preloadedPDFs = {};
@@ -304,7 +311,7 @@ function loadLibrary() {
     catWrapper.className = 'category-container';
     catWrapper.innerHTML = `
       <h3 class="category-title">&gt;&gt; ${escapeHTML(cat.name.toUpperCase())}</h3><br>
-      <span class="category-desc">${escapeHTML(cat.desc)}</span>
+      <span class="category-desc">${cat.desc.replace(/\n\n/g, "<br><br>")}</span>
     `;
 
     const shelf = document.createElement('div');
