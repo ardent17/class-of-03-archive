@@ -88,7 +88,9 @@ marquee { background: #ff8c00; color: #fff; font-weight: bold; padding: 5px; bor
 .download-link { font-family: 'VT323', monospace; font-size: 1.2em; color: #ff8c00; text-decoration: none; border: 1px dashed #ff8c00; padding: 2px 10px; background: #222; }
 .download-link:hover { background: #ff8c00; color: white; }
 .close-btn { background: #d11; color: white; border: 2px outset #fff; cursor: pointer; font-weight: bold; padding: 2px 10px; font-family: 'VT323', monospace; font-size: 1em; }
-
+button.download-link {
+  cursor: pointer;
+}
 #book-reader { display: flex; flex-direction: column; align-items: flex-start; justify-content: flex-start; flex-grow: 1; overflow: auto; background: #222; padding: 10px; border: none; }
 #pdf-canvas { background: white; box-shadow: 5px 5px 15px rgba(0,0,0,0.8); border: 1px solid #000; margin: auto; }
 .fit-to-screen { max-width: 100%; max-height: 100%; object-fit: contain; }
@@ -143,18 +145,18 @@ footer a { color: #f7f8f9; text-decoration: underline; }
         <button class="page-btn" onclick="zoomOut()" title="Zoom Out">🔍-</button>
         <button class="page-btn" onclick="resetZoom()" title="Fit to Screen">FIT</button>
         <button class="page-btn" onclick="zoomIn()" title="Zoom In">🔍+</button>
-        <button class="page-btn" onclick="rotateZine()" title="Rotate 90°">↻</button>
       </div>
       <div class="toolbar-group">
-        <button class="page-btn" id="prev-page" onclick="goPrevPage()" >◀ PREV [←]</button>
+        <button class="page-btn" id="prev-page" onclick="goPrevPage()" >◀ PREV</button>
         <div id="page-info" style="display: inline-flex; align-items: center; gap: 5px; background: #111; padding: 2px 10px; border: 1px solid #ff8c00; font-family: 'VT323', monospace; font-size: 1.2em; color: #ff8c00;">
     PAGE 
         <input type="number" id="page-num-input" value="1" min="1" style="background: #222; color: #ff8c00; border: 1px dashed #ff8c00; width: 50px; font-family: 'VT323', monospace; font-size: 1em; text-align: center; outline: none;" onchange="jumpToPage(this.value)"> 
      /  <span id="page-count">?</span>
       </div>
-  <button class="page-btn" id="next-page" onclick="goNextPage()">NEXT [→] ▶</button>
-  <button class="page-btn" id="read-back-btn" style="background: #ff8c00; border-color: #ffa733; margin-left: 10px;">LAST PAGE  ↻</button>
-  <a id="modal-download-btn" class="download-link" download>DOWNLOAD</a>
+  <button class="page-btn" id="next-page" onclick="goNextPage()">NEXT ▶</button>
+  <button class="page-btn" id="read-back-btn" style="background: #ff8c00; border-color: #ffa733; margin-left: 10px;">SECTION</button>
+  <button class="download-link" type="button" onclick="copyPageLink()">🔗</button>
+  <a id="modal-download-btn" class="download-link" download>💾</a>
 </div>
 
     </div>
@@ -303,6 +305,7 @@ function renderPage(num) {
   document.getElementById('page-num-input').value = num;
   document.getElementById('prev-page').disabled = num <= 1;
   document.getElementById('next-page').disabled = num >= pdfDoc.numPages;
+  updateReaderURL();
 }
 
 function queueRenderPage(num) { if (pageIsRendering) pageNumIsPending = num; else renderPage(num); }
@@ -325,7 +328,50 @@ function zoomOut() { canvas.classList.remove('fit-to-screen'); if (basePdfScale 
 function resetZoom() { canvas.classList.add('fit-to-screen'); basePdfScale = 2.0; queueRenderPage(pageNum); }
 function rotateZine() { currentRotation = (currentRotation + 90) % 360; queueRenderPage(pageNum); }
 
+let currentBook = null;
+
+function updateReaderURL() {
+  if (!currentBook || !pdfDoc) return;
+
+  const url = new URL(window.location.href);
+  url.searchParams.set('book', currentBook.pdf_url);
+  url.searchParams.set('page', pageNum);
+  history.replaceState({}, '', url);
+}
+
+function copyPageLink() {
+  updateReaderURL();
+  navigator.clipboard.writeText(window.location.href);
+  alert('Page link copied!');
+}
+
+function openFromURL() {
+  const params = new URLSearchParams(window.location.search);
+  const pdfUrl = params.get('book');
+  const requestedPage = parseInt(params.get('page'), 10);
+
+  if (!pdfUrl) return;
+
+  const book = BOOKS.find(book => book.pdf_url === pdfUrl);
+  if (!book) return;
+
+  openModal(book);
+
+  const waitForPDF = setInterval(() => {
+    if (!pdfDoc) return;
+    clearInterval(waitForPDF);
+
+    if (Number.isInteger(requestedPage) &&
+        requestedPage >= 1 &&
+        requestedPage <= pdfDoc.numPages) {
+      pageNum = requestedPage;
+      renderPage(pageNum);
+    }
+  }, 50);
+}
+
 function openModal(book, startFromBack = false) {
+  currentBook = book;
   document.getElementById('modal-title').innerText = book.title;
   document.getElementById('modal-author').innerText = book.author;
   document.getElementById('modal-download-btn').href = book.pdf_url;
@@ -416,6 +462,7 @@ document.addEventListener('mousemove', (e) => {
 });
 
 loadLibrary();
+openFromURL();
 </script>
 
 <!-- Chattable -->
