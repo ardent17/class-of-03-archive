@@ -91,9 +91,65 @@ marquee { background: #ff8c00; color: #fff; font-weight: bold; padding: 5px; bor
 button.download-link {
   cursor: pointer;
 }
-#book-reader { display: flex; flex-direction: column; align-items: flex-start; justify-content: flex-start; flex-grow: 1; overflow: auto; background: #222; padding: 10px; border: none; }
-#pdf-canvas { background: white; box-shadow: 5px 5px 15px rgba(0,0,0,0.8); border: 1px solid #000; margin: auto; }
-.fit-to-screen { max-width: 100%; max-height: 100%; object-fit: contain; }
+
+/* Reader container */
+#book-reader {
+  flex: 1;
+  overflow: auto;
+  background: #222;
+  padding: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+/* Spread container */
+#spread-view {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  align-items: flex-start;
+  width: 100%;
+  max-width: 100%;
+  margin: auto;
+}
+
+/* Single vs spread mode */
+#spread-view.single-page-mode {
+  gap: 0;
+}
+
+#spread-view.single-page-mode #pdf-canvas-right {
+  display: none;
+}
+
+#spread-view.spread-mode #pdf-canvas-right {
+  display: block;
+}
+
+/* Canvas sizing and scaling */
+.pdf-canvas {
+  display: block;
+  background: white;
+  border: 1px solid #000;
+  box-shadow: 5px 5px 15px rgba(0,0,0,0.8);
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+/* Hidden canvas helper
+.pdf-canvas.hidden {
+  display: none;
+} */
+
+/* Responsive tweak */
+@media (max-width: 900px) {
+  #spread-view {
+    flex-direction: column;
+    align-items: center;
+  }
+}
 
 .glitter-trail { position: absolute; width: 5px; height: 5px; border-radius: 50%; pointer-events: none; z-index: 99999; animation: glitter-fade 0.5s linear forwards; }
 @keyframes glitter-fade { 0% { opacity: 1; transform: scale(1) translateY(0); } 100% { opacity: 0; transform: scale(0.2) translateY(15px); } }
@@ -141,29 +197,49 @@ footer a { color: #f7f8f9; text-decoration: underline; }
         <span id="modal-title" class="t-title">Title</span>
         <span class="t-author">by <span id="modal-author">Author</span></span>
       </div>
-      <div class="toolbar-group">
-        <button class="page-btn" onclick="zoomOut()" title="Zoom Out">🔍-</button>
-        <button class="page-btn" onclick="resetZoom()" title="Fit to Screen">FIT</button>
-        <button class="page-btn" onclick="zoomIn()" title="Zoom In">🔍+</button>
-      </div>
-      <div class="toolbar-group">
-        <button class="page-btn" id="prev-page" onclick="goPrevPage()" >◀ PREV</button>
-        <div id="page-info" style="display: inline-flex; align-items: center; gap: 5px; background: #111; padding: 2px 10px; border: 1px solid #ff8c00; font-family: 'VT323', monospace; font-size: 1.2em; color: #ff8c00;">
-    PAGE 
-        <input type="number" id="page-num-input" value="1" min="1" style="background: #222; color: #ff8c00; border: 1px dashed #ff8c00; width: 50px; font-family: 'VT323', monospace; font-size: 1em; text-align: center; outline: none;" onchange="jumpToPage(this.value)"> 
-     /  <span id="page-count">?</span>
-      </div>
-  <button class="page-btn" id="next-page" onclick="goNextPage()">NEXT ▶</button>
-  <select id="section-picker" class="download-link" onchange="jumpToSection(this.value)">
-  <option value="">SECTION</option>
-  </select>
-  <button class="download-link" type="button" onclick="copyPageLink()">🔗</button>
-  <a id="modal-download-btn" class="download-link" download>💾</a>
-</div>
 
+      <div class="toolbar-group">
+        <button class="page-btn" type="button" onclick="zoomOut()" title="Zoom Out">🔍-</button>
+        <button class="page-btn" type="button" onclick="resetZoom()" title="Fit to Screen">FIT</button>
+        <button class="page-btn" type="button" onclick="zoomIn()" title="Zoom In">🔍+</button>
+        <button class="page-btn" id="spread-toggle" type="button" onclick="toggleSpreadMode()">2-UP</button>
+      </div>
+
+      <div class="toolbar-group">
+        <button class="page-btn" id="prev-page" type="button" onclick="goPrevPage()">◀ PREV</button>
+
+        <div id="page-info" style="display: inline-flex; align-items: center; gap: 5px; background: #111; padding: 2px 10px; border: 1px solid #ff8c00; font-family: 'VT323', monospace; font-size: 1.2em; color: #ff8c00;">
+          PAGE
+          <input
+            type="number"
+            id="page-num-input"
+            value="1"
+            min="1"
+            style="background: #222; color: #ff8c00; border: 1px dashed #ff8c00; width: 50px; font-family: 'VT323', monospace; font-size: 1em; text-align: center; outline: none;"
+            onchange="jumpToPage(this.value)"
+          >
+          / <span id="page-count">?</span>
+        </div>
+
+        <button class="page-btn" id="next-page" type="button" onclick="goNextPage()">NEXT ▶</button>
+
+        <select id="section-picker" class="download-link" onchange="jumpToSection(this.value)">
+          <option value="">SECTION</option>
+        </select>
+
+        <button class="download-link" type="button" onclick="copyPageLink()">🔗</button>
+        <a id="modal-download-btn" class="download-link" download>💾</a>
+        <button class="close-btn" type="button" onclick="closeModal()">X</button>
+      </div>
     </div>
+
     <div id="book-reader">
-      <canvas id="pdf-canvas" class="fit-to-screen"></canvas>
+      <div id="reader-stage">
+        <div id="spread-view" class="single-page-mode">
+          <canvas id="pdf-canvas-left" class="pdf-canvas"></canvas>
+          <canvas id="pdf-canvas-right" class="pdf-canvas hidden"></canvas>
+        </div>
+      </div>
     </div>
   </div>
 </div>
@@ -195,30 +271,28 @@ function escapeHTML(str) {
 const BOOKS = [
   { title: "2002 Yearbook", author: "CCHS", category: "Yearbooks", pdf_url: "files/2002nowandthen.pdf", cover_url: "images/cover.jpg",
     sections: [
-    { label: "EVENTS", page: 6 },
-    { label: "SENIORS", page: 28 },
-    { label: "JUNIORS", page: 58 },
-    { label: "SOPHOMORES", page: 76 },
-    { label: "FRESHMEN", page: 96 },
-    { label: "FACULTY", page: 120 },
-    { label: "SPORTS", page: 132 },
-    { label: "CLUBS", page: 176 },
-    { label: "9/11", page: 214 },
-    { label: "ADS", page: 217 },
-    { label: "INDEX", page: 248 }
+      { label: "EVENTS", page: 6 },
+      { label: "SENIORS", page: 28 },
+      { label: "JUNIORS", page: 58 },
+      { label: "SOPHOMORES", page: 76 },
+      { label: "FRESHMEN", page: 96 },
+      { label: "FACULTY", page: 120 },
+      { label: "SPORTS", page: 132 },
+      { label: "CLUBS", page: 176 },
+      { label: "9/11", page: 214 },
+      { label: "ADS", page: 217 },
+      { label: "INDEX", page: 248 }
     ]
   },
 ];
 
 const categories = [
-  { id: "Yearbooks", name: "Yearbooks",   desc: "Class yearbooks, scanned and ready to flip through." },
-  { id: "Other",     name: "Other Media", desc: "Coming soon!" }
+  { id: "Yearbooks", name: "Yearbooks", desc: "Class yearbooks, scanned and ready to flip through." },
+  { id: "Other", name: "Other Media", desc: "Coming soon!" }
 ];
 
-// Global dictionary to cache preloaded PDF promises
 const preloadedPDFs = {};
 
-// --- Render the shelves ---
 function loadLibrary() {
   const container = document.getElementById('shelves-container');
   container.innerHTML = '';
@@ -246,23 +320,17 @@ function loadLibrary() {
         zElement.style.transform = `rotate(${Math.floor(Math.random() * 10) - 5}deg)`;
 
         if (book.cover_url) {
-          // Manual cover image override
           zElement.innerHTML = `<img src="${escapeHTML(book.cover_url)}" class="book-cover-img" alt="Cover">`;
         } else {
-          // Auto-generate the cover from the PDF's first page
           const thumb = document.createElement('canvas');
           thumb.className = 'book-cover-img';
           zElement.appendChild(thumb);
           renderThumbnail(book, thumb, zElement);
         }
 
-        // Default click loads from front
-
-        // If they right-click or long-press the book cover, they can trigger starting from the back
-                // Clean, simple single-click back to normal
         zElement.onclick = () => openModal(book, false);
-        zElement.oncontextmenu = null; // Clears any broken right-click logic
-        
+        zElement.oncontextmenu = null;
+
         shelf.appendChild(zElement);
 
         if (!preloadedPDFs[book.pdf_url]) {
@@ -276,22 +344,22 @@ function loadLibrary() {
   });
 }
 
-
-// --- Draw a PDF's first page onto a small canvas as its cover ---
 function renderThumbnail(book, canvasEl, zElement) {
   pdfjsLib.getDocument(book.pdf_url).promise
     .then(pdf => pdf.getPage(1))
     .then(page => {
       const base = page.getViewport({ scale: 1 });
-      const scale = 280 / base.height; // 2x shelf height for a sharp thumbnail
+      const scale = 280 / base.height;
       const viewport = page.getViewport({ scale });
       canvasEl.width = viewport.width;
       canvasEl.height = viewport.height;
-      return page.render({ canvasContext: canvasEl.getContext('2d'), viewport }).promise;
+      return page.render({
+        canvasContext: canvasEl.getContext('2d'),
+        viewport
+      }).promise;
     })
     .catch(err => {
       console.error("Couldn't render cover for:", book.title, "->", book.pdf_url, err);
-      // Fallback to a text cover so the shelf is never blank
       zElement.innerHTML = `
         <div class="book-text-wrapper">
           <div class="book-title">${escapeHTML(book.title)}</div>
@@ -300,51 +368,126 @@ function renderThumbnail(book, canvasEl, zElement) {
     });
 }
 
-// --- PDF.js reader ---
-let pdfDoc = null, pageNum = 1, pageIsRendering = false, pageNumIsPending = null;
-let currentRotation = 0, basePdfScale = 2.0;
-const canvas = document.getElementById('pdf-canvas');
-const ctx = canvas.getContext('2d');
-
-function renderPage(num) {
-  pageIsRendering = true;
-  pdfDoc.getPage(num).then(page => {
-    const viewport = page.getViewport({ scale: basePdfScale, rotation: currentRotation });
-    canvas.height = viewport.height;
-    canvas.width = viewport.width;
-    page.render({ canvasContext: ctx, viewport }).promise.then(() => {
-      pageIsRendering = false;
-      if (pageNumIsPending !== null) { renderPage(pageNumIsPending); pageNumIsPending = null; }
-    });
-  });
-  // Keep both the input counter value and disabled states unified
-  document.getElementById('page-num-input').value = num;
-  document.getElementById('prev-page').disabled = num <= 1;
-  document.getElementById('next-page').disabled = num >= pdfDoc.numPages;
-  updateReaderURL();
-}
-
-function queueRenderPage(num) { if (pageIsRendering) pageNumIsPending = num; else renderPage(num); }
-function jumpToPage(val) {
-  let targetPage = parseInt(val, 10);
-  if (isNaN(targetPage)) return;
-  
-  // Boundary check safety catches
-  if (targetPage < 1) targetPage = 1;
-  if (pdfDoc && targetPage > pdfDoc.numPages) targetPage = pdfDoc.numPages;
-  
-  pageNum = targetPage;
-  queueRenderPage(pageNum);
-}
-function goPrevPage() { if (pageNum <= 1) return; pageNum--; queueRenderPage(pageNum); }
-function goNextPage() { if (pageNum >= pdfDoc.numPages) return; pageNum++; queueRenderPage(pageNum); }
-
-function zoomIn() { canvas.classList.remove('fit-to-screen'); basePdfScale += 0.25; queueRenderPage(pageNum); }
-function zoomOut() { canvas.classList.remove('fit-to-screen'); if (basePdfScale <= 0.5) return; basePdfScale -= 0.25; queueRenderPage(pageNum); }
-function resetZoom() { canvas.classList.add('fit-to-screen'); basePdfScale = 2.0; queueRenderPage(pageNum); }
-function rotateZine() { currentRotation = (currentRotation + 90) % 360; queueRenderPage(pageNum); }
-
+/* --- PDF.js reader --- */
+let pdfDoc = null;
 let currentBook = null;
+let pageNum = 1;
+let spreadMode = false;
+let zoomLevel = 1;
+const ZOOM_STEP = 0.25;
+const MIN_ZOOM = 0.5;
+const MAX_ZOOM = 3;
+let currentRenderToken = 0;
+let activeRenderTasks = [];
+let currentLoadToken = 0;
+
+const leftCanvas = document.getElementById('pdf-canvas-left');
+const rightCanvas = document.getElementById('pdf-canvas-right');
+const leftCtx = leftCanvas.getContext('2d');
+const rightCtx = rightCanvas.getContext('2d');
+const spreadView = document.getElementById('spread-view');
+const bookReader = document.getElementById('book-reader');
+
+function clearCanvas(canvas, ctx) {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  canvas.width = 0;
+  canvas.height = 0;
+}
+
+function cancelActiveRenders() {
+  activeRenderTasks.forEach(task => {
+    try {
+      task.cancel();
+    } catch (err) {}
+  });
+  activeRenderTasks = [];
+}
+
+function setCanvasVisible(canvas, visible) {
+  canvas.classList.toggle('hidden', !visible);
+}
+
+function getVisiblePages(startPage) {
+  if (!pdfDoc) return [];
+
+  if (!spreadMode || startPage === 1) {
+    return [startPage];
+  }
+
+  const pages = [startPage];
+  const rightPage = startPage + 1;
+
+  if (rightPage <= pdfDoc.numPages) {
+    pages.push(rightPage);
+  }
+
+  return pages;
+}
+
+function normalizePageForMode(num, mode = spreadMode) {
+  if (!pdfDoc) return 1;
+
+  let page = parseInt(num, 10);
+  if (!Number.isInteger(page)) page = 1;
+  if (page < 1) page = 1;
+  if (page > pdfDoc.numPages) page = pdfDoc.numPages;
+
+  if (!mode) return page;
+  if (page <= 1) return 1;
+  return page % 2 === 0 ? page : page - 1;
+}
+
+function getNextPage(num) {
+  if (!pdfDoc) return 1;
+
+  if (!spreadMode) {
+    return Math.min(pdfDoc.numPages, num + 1);
+  }
+
+  if (num === 1) {
+    return pdfDoc.numPages >= 2 ? 2 : 1;
+  }
+
+  return Math.min(pdfDoc.numPages, num + 2);
+}
+
+function getPrevPage(num) {
+  if (!pdfDoc) return 1;
+
+  if (!spreadMode) {
+    return Math.max(1, num - 1);
+  }
+
+  if (num <= 1) return 1;
+  if (num <= 2) return 1;
+
+  return Math.max(1, num - 2);
+}
+
+function getPageInputValue() {
+  return pageNum;
+}
+
+function updateReaderUI() {
+  if (!pdfDoc) return;
+
+  const visiblePages = getVisiblePages(pageNum);
+  const pageInput = document.getElementById('page-num-input');
+  const prevBtn = document.getElementById('prev-page');
+  const nextBtn = document.getElementById('next-page');
+  const pageCount = document.getElementById('page-count');
+  const spreadToggle = document.getElementById('spread-toggle');
+
+  pageInput.value = getPageInputValue();
+  pageCount.textContent = pdfDoc.numPages;
+  prevBtn.disabled = pageNum <= 1;
+  nextBtn.disabled = visiblePages[visiblePages.length - 1] >= pdfDoc.numPages;
+
+  spreadView.classList.toggle('single-page-mode', !spreadMode);
+  spreadView.classList.toggle('spread-mode', spreadMode);
+  spreadToggle.textContent = spreadMode ? 'SINGLE' : 'SPREAD';
+  spreadToggle.title = spreadMode ? 'Switch to single page' : 'Switch to facing pages';
+}
 
 function updateReaderURL() {
   if (!currentBook || !pdfDoc) return;
@@ -355,60 +498,142 @@ function updateReaderURL() {
   history.replaceState({}, '', url);
 }
 
-function copyPageLink() {
-  updateReaderURL();
-  navigator.clipboard.writeText(window.location.href);
-  alert('Page link copied!');
+function getFitScale(page) {
+  const baseViewport = page.getViewport({ scale: 1 });
+
+  const availableWidth = spreadMode
+    ? (bookReader.clientWidth - 60) / 2
+    : (bookReader.clientWidth - 40);
+
+  const availableHeight = bookReader.clientHeight - 20;
+
+  const widthScale = availableWidth / baseViewport.width;
+  const heightScale = availableHeight / baseViewport.height;
+
+  return Math.min(widthScale, heightScale);
 }
 
-function openFromURL() {
-  const params = new URLSearchParams(window.location.search);
-  const pdfUrl = params.get('book');
-  const requestedPage = parseInt(params.get('page'), 10);
+function renderPageToCanvas(page, canvas, ctx, renderToken) {
+  const fitScale = getFitScale(page);
+  const viewport = page.getViewport({ scale: fitScale * zoomLevel });
 
-  if (!pdfUrl) return;
+  canvas.width = viewport.width;
+  canvas.height = viewport.height;
+  canvas.style.width = `${viewport.width}px`;
+  canvas.style.height = `${viewport.height}px`;
 
-  const book = BOOKS.find(book => book.pdf_url === pdfUrl);
-  if (!book) return;
+  const task = page.render({
+    canvasContext: ctx,
+    viewport
+  });
 
-  openModal(book, false, requestedPage);
+  activeRenderTasks.push(task);
+
+  return task.promise.catch(err => {
+    if (err && err.name === 'RenderingCancelledException') {
+      return;
+    }
+    throw err;
+  }).then(() => {
+    if (renderToken !== currentRenderToken) return;
+  });
 }
 
-function openModal(book, startFromBack = false, requestedPage = null) {
-  currentBook = book;
-  populateSectionPicker(book);
-  document.getElementById('modal-title').innerText = book.title;
-  document.getElementById('modal-author').innerText = book.author;
-  document.getElementById('modal-download-btn').href = book.pdf_url;
-  document.getElementById('book-modal').style.display = 'flex';
+async function renderCurrentView() {
+  if (!pdfDoc) return;
 
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  currentRotation = 0;
-  basePdfScale = 2.0;
-  canvas.classList.add('fit-to-screen');
-  document.getElementById('page-num-input').value = "1";
-  document.getElementById('page-count').textContent = "?";
-  document.getElementById('prev-page').disabled = true;
-  document.getElementById('next-page').disabled = true;
-  document.getElementById('section-picker').value = '';
+  cancelActiveRenders();
+  currentRenderToken += 1;
+  const renderToken = currentRenderToken;
 
-  const pdfPromise = preloadedPDFs[book.pdf_url] || pdfjsLib.getDocument(book.pdf_url).promise;
+  updateReaderUI();
 
-  pdfPromise.then(loadedDoc => {
-    pdfDoc = loadedDoc;
-    document.getElementById('page-count').textContent = pdfDoc.numPages;
+  const visiblePages = getVisiblePages(pageNum);
+  const leftPageNum = visiblePages[0] || null;
+  const rightPageNum = visiblePages[1] || null;
 
-    if (Number.isInteger(requestedPage) && requestedPage >= 1 && requestedPage <= pdfDoc.numPages) {
-      pageNum = requestedPage;
-    } else {
-      pageNum = startFromBack ? pdfDoc.numPages : 1;
+  try {
+    if (!leftPageNum) return;
+
+    const leftPagePromise = pdfDoc.getPage(leftPageNum);
+    const rightPagePromise = rightPageNum ? pdfDoc.getPage(rightPageNum) : Promise.resolve(null);
+    const [leftPage, rightPage] = await Promise.all([leftPagePromise, rightPagePromise]);
+
+    if (renderToken !== currentRenderToken) return;
+
+    setCanvasVisible(leftCanvas, true);
+    setCanvasVisible(rightCanvas, !!rightPage);
+
+    if (!rightPage) {
+      clearCanvas(rightCanvas, rightCtx);
     }
 
-    renderPage(pageNum);
-  }).catch(err => {
-    console.error("Error loading PDF:", book.pdf_url, err);
-    alert("That file couldn't be loaded. Check the pdf_url path:\n" + book.pdf_url);
-  });
+    await Promise.all([
+      renderPageToCanvas(leftPage, leftCanvas, leftCtx, renderToken),
+      rightPage ? renderPageToCanvas(rightPage, rightCanvas, rightCtx, renderToken) : Promise.resolve()
+    ]);
+
+    if (renderToken !== currentRenderToken) return;
+
+    updateReaderURL();
+  } catch (err) {
+    if (err && err.name === 'RenderingCancelledException') {
+      return;
+    }
+    console.error('Error rendering PDF pages:', err);
+  }
+}
+
+function jumpToPage(val) {
+  if (!pdfDoc) return;
+  pageNum = normalizePageForMode(val);
+  renderCurrentView();
+}
+
+function goPrevPage() {
+  if (!pdfDoc) return;
+  pageNum = getPrevPage(pageNum);
+  renderCurrentView();
+}
+
+function goNextPage() {
+  if (!pdfDoc) return;
+  pageNum = getNextPage(pageNum);
+  pageNum = normalizePageForMode(pageNum);
+  renderCurrentView();
+}
+
+function toggleSpreadMode() {
+  if (!pdfDoc) return;
+  spreadMode = !spreadMode;
+  pageNum = normalizePageForMode(pageNum);
+  renderCurrentView();
+}
+
+function zoomIn() {
+  zoomLevel = Math.min(MAX_ZOOM, +(zoomLevel + ZOOM_STEP).toFixed(2));
+  renderCurrentView();
+}
+
+function zoomOut() {
+  zoomLevel = Math.max(MIN_ZOOM, +(zoomLevel - ZOOM_STEP).toFixed(2));
+  renderCurrentView();
+}
+
+function resetZoom() {
+  zoomLevel = 1;
+  renderCurrentView();
+}
+
+function copyPageLink() {
+  updateReaderURL();
+  navigator.clipboard.writeText(window.location.href)
+    .then(() => {
+      alert('Page link copied!');
+    })
+    .catch(() => {
+      alert('Could not copy page link.');
+    });
 }
 
 function populateSectionPicker(book) {
@@ -433,15 +658,107 @@ function jumpToSection(page) {
   document.getElementById('section-picker').value = '';
 }
 
-function closeModal() {
-  document.getElementById('book-modal').style.display = 'none';
+function resetReaderStateForOpen() {
+  cancelActiveRenders();
+  currentRenderToken += 1;
+
   pdfDoc = null;
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  pageNum = 1;
+  spreadMode = false;
+  zoomLevel = 1;
+
+  clearCanvas(leftCanvas, leftCtx);
+  clearCanvas(rightCanvas, rightCtx);
+  setCanvasVisible(leftCanvas, true);
+  setCanvasVisible(rightCanvas, false);
+
+  document.getElementById('page-num-input').value = '1';
+  document.getElementById('page-count').textContent = '?';
+  document.getElementById('prev-page').disabled = true;
+  document.getElementById('next-page').disabled = true;
+  document.getElementById('section-picker').value = '';
+  document.getElementById('spread-toggle').textContent = '2-UP';
+
+  spreadView.classList.remove('spread-mode');
+  spreadView.classList.add('single-page-mode');
+  bookReader.scrollTop = 0;
+  bookReader.scrollLeft = 0;
+}
+
+function openModal(book, startFromBack = false, requestedPage = null) {
+  currentBook = book;
+  currentLoadToken += 1;
+  const loadToken = currentLoadToken;
+
+  populateSectionPicker(book);
+  document.getElementById('modal-title').innerText = book.title;
+  document.getElementById('modal-author').innerText = book.author;
+  document.getElementById('modal-download-btn').href = book.pdf_url;
+  document.getElementById('book-modal').style.display = 'flex';
+
+  resetReaderStateForOpen();
+
+  const pdfPromise = preloadedPDFs[book.pdf_url] || pdfjsLib.getDocument(book.pdf_url).promise;
+  preloadedPDFs[book.pdf_url] = pdfPromise;
+
+  pdfPromise.then(loadedDoc => {
+    if (loadToken !== currentLoadToken) return;
+
+    pdfDoc = loadedDoc;
+    document.getElementById('page-count').textContent = pdfDoc.numPages;
+
+    if (Number.isInteger(requestedPage) && requestedPage >= 1 && requestedPage <= pdfDoc.numPages) {
+      pageNum = requestedPage;
+    } else {
+      pageNum = startFromBack ? pdfDoc.numPages : 1;
+    }
+
+    pageNum = normalizePageForMode(pageNum, spreadMode);
+    updateReaderUI();
+    renderCurrentView();
+  }).catch(err => {
+    if (loadToken !== currentLoadToken) return;
+    console.error("Error loading PDF:", book.pdf_url, err);
+    alert("That file couldn't be loaded. Check the pdf_url path:\n" + book.pdf_url);
+  });
+}
+
+function closeModal() {
+  currentLoadToken += 1;
+  cancelActiveRenders();
+  currentRenderToken += 1;
+
+  document.getElementById('book-modal').style.display = 'none';
+
+  clearCanvas(leftCanvas, leftCtx);
+  clearCanvas(rightCanvas, rightCtx);
+  setCanvasVisible(leftCanvas, true);
+  setCanvasVisible(rightCanvas, false);
+
+  pdfDoc = null;
+  currentBook = null;
+  pageNum = 1;
+  spreadMode = false;
+  zoomLevel = 1;
+}
+
+function openFromURL() {
+  const params = new URLSearchParams(window.location.search);
+  const pdfUrl = params.get('book');
+  const requestedPage = parseInt(params.get('page'), 10);
+
+  if (!pdfUrl) return;
+
+  const book = BOOKS.find(book => book.pdf_url === pdfUrl);
+  if (!book) return;
+
+  openModal(book, false, requestedPage);
 }
 
 document.addEventListener('keydown', (e) => {
   const modalOpen = document.getElementById('book-modal').style.display === 'flex';
-  const typing = ['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName);
+  const activeTag = document.activeElement ? document.activeElement.tagName : '';
+  const typing = ['INPUT', 'TEXTAREA', 'SELECT'].includes(activeTag);
 
   if (!modalOpen) return;
 
@@ -470,20 +787,24 @@ document.getElementById('book-modal').addEventListener('click', (e) => {
   }
 });
 
-// --- Glitter trail ---
+/* --- Glitter trail --- */
 const glitterColors = ['#4169e1', '#ff8c00', '#ffffff', '#ffa733'];
 let lastGlitterTime = 0;
+
 document.addEventListener('mousemove', (e) => {
   const now = Date.now();
   if (now - lastGlitterTime < 15) return;
   lastGlitterTime = now;
+
   const glitter = document.createElement('div');
   glitter.className = 'glitter-trail';
   glitter.style.left = (e.pageX + (Math.random() - 0.5) * 20) + 'px';
   glitter.style.top = (e.pageY + (Math.random() - 0.5) * 20) + 'px';
+
   const color = glitterColors[Math.floor(Math.random() * glitterColors.length)];
   glitter.style.backgroundColor = color;
   glitter.style.boxShadow = `0 0 5px ${color}`;
+
   document.body.appendChild(glitter);
   setTimeout(() => glitter.remove(), 500);
 });

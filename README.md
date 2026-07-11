@@ -8,9 +8,9 @@ A retro, single-page web archive for browsing and reading class yearbooks and ep
 - 🖼️ Auto-generated covers — Renders the PDF's first page as its shelf cover automatically. Optional manual `cover_url` override per item.
 - 📚 Organized shelves — Items grouped into customizable categories (`Yearbooks`, `Other Media`, etc.) with descriptions and “empty shelf” states.
 - 🔍 Full reader toolbar:
-  - Page navigation (`Prev` / `Next`), direct page jump, live page count, and “From Back” start option
+  - Page navigation (`Prev` / `Next`), direct page jump, live page count, and Sections dropdown menu
   - Zoom in / out + Fit to Screen
-  - One-click Save PDF download link
+  - One-click download link
 - 🎨 Retro aesthetic — VT323 + Comic Sans, dashed borders, drop shadows, scrolling `<marquee>`, checkerboard background, and a glitter mouse trail.
 - 🪧 Interactive shelf — Covers sit at random tilt angles and zoom up on hover for a tactile, browsable feel.
 - 💬 Community guestbook — Embedded Chattable live chat ("Sign the Yearbook") for classmates to reconnect and share memories.
@@ -39,8 +39,6 @@ Each entry supports: `title`, `author`, `category`, `pdf_url`, optional `color` 
 
 - Additional yearbooks — Add more class years and editions as scans become available.
 - More artifacts & ephemera — Prom programs, playbills, newspapers, sports programs, flyers, and other memorabilia.
-- Deep links — Shareable URLs that open a specific artifact/page.
-- Tagging & filtering — Filter book content by tags (`sports`, `clubs`, `seniors`, etc.).
 - Full-text search inside PDFs — Leverage PDF.js text layers for in-document searching.
 - Mobile reader polish — Improved touch gestures (swipe to turn pages, pinch-to-zoom).
 - Accessibility pass — Keyboard navigation, ARIA labels, reduced-motion option for the glitter trail.
