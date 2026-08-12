@@ -272,7 +272,7 @@ function escapeHTML(str) {
 */
 
 const BOOKS = [
-  { title: "2002 Yearbook", author: "CCHS", category: "Yearbooks", pdf_url: "files/2002nowandthen.pdf", cover_url: "images/cover.jpg",
+  { title: "2002 Yearbook", author: "CCHS", category: "Yearbooks", pdf_url: "files/2002nowandthen.pdf", cover_url: "images/2002cover.jpg",
     sections: [
       { label: "EVENTS", page: 6 },
       { label: "SENIORS", page: 28 },
@@ -287,6 +287,23 @@ const BOOKS = [
       { label: "INDEX", page: 248 }
     ]
   },
+  { title: "2003 Yearbook", author: "CCHS", category: "Yearbooks", pdf_url: "files/2003daretodream.pdf", cover_url: "images/2003cover.jpg",
+    sections: [
+      { label: "STUDENT LIFE", page: 6 },
+      { label: "EVENTS", page: 30 },
+      { label: "SENIORS", page: 42 },
+      { label: "JUNIORS", page: 84 },
+      { label: "SOPHOMORES", page: 100 },
+      { label: "FRESHMEN", page: 116 },
+      { label: "FACULTY", page: 132 },
+      { label: "SPORTS", page: 150 },
+      { label: "CLUBS", page: 201 },
+      { label: "SCHOOL LIFE", page: 228 },
+      { label: "INDEX", page: 258 },
+      { label: "ADS", page: 266},
+      { label: "WORLD EVENTS", page: 303}
+    ]
+  },
   { title: "The Seahawk's Eye", author: "CCHS", category: "Other", pdf_url: "files/seahawks-eye-dec-99.pdf", cover_url: "images/seahawk-cover-99.jpg" ,
   },
   { title: "The Seahawk's Eye", author: "CCHS", category: "Other", pdf_url: "files/seahawks-eye-march-01.pdf", cover_url: "images/seahawk-cover-01.jpg" ,
@@ -294,7 +311,7 @@ const BOOKS = [
 ];
 
 const categories = [
-  { id: "Yearbooks", name: "Yearbooks", desc: "Class yearbooks, scanned and ready to flip through. Well, one yearbook. More coming soon" },
+  { id: "Yearbooks", name: "Yearbooks", desc: "Class yearbooks, scanned and ready to flip through." },
   { id: "Other", name: "Other Media", desc: "(1) The Seahawk's Eye, December 15, 1999:\n In this final pre-Millennium issue of the Seahawk's Eye, find a brutal editor shutdown of a 27-year-old McDonald's worker, a horny holiday note about ketchup (p. 13), and an entertaining weed legalization debate between the guy you want to chill with and the girl with the best homework. Also contains a tribute to Lilli Pierce, who was a very cool girl. \n\n (2) The Seahawk's Eye, March 15, 2001:\n McDonald's returns, this time because it burned down. The Mr. Seahawk nominees want you to know they are chick magnets and aspire to be like Dirk Diggler, but ask that you please not be too picky. Someone built an Empire State building out of cans at Edison mall." }
 ];
 
