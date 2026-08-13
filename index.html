@@ -159,6 +159,55 @@ button.download-link {
 
 footer { text-align: center; margin-top: 40px; font-size: 0.8em; opacity: 0.8; font-family: monospace; color: #f7f8f9; }
 footer a { color: #f7f8f9; text-decoration: underline; }
+
+.archive-keeper-photo {
+  width: min(100%, 220px);
+  aspect-ratio: 1 / 1;
+  margin: 14px auto 20px;
+  border: 4px dashed #ff8c00;
+  background: #ffffff;
+  box-shadow: 6px 6px 0 #4169e1;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.archive-keeper-photo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.photo-caption {
+  margin: 10px 0 18px;
+  font-family: 'VT323', monospace;
+  font-size: 1.4em;
+}
+
+.photo-caption a {
+  color: #ff8c00;
+  text-decoration: underline;
+  text-decoration-style: dashed;
+  text-shadow: 1px 1px #000;
+}
+
+.photo-caption a:hover {
+  color: #ffffff;
+  background: #ff8c00;
+  text-decoration: none;
+}
+
+.takedown-note {
+  max-width: 760px;
+  margin: 20px auto 16px;
+  padding: 8px 12px;
+  border-top: 1px dashed rgba(255, 140, 0, 0.75);
+  border-bottom: 1px dashed rgba(255, 140, 0, 0.75);
+  color: #f7f8f9;
+  font-size: 0.9em;
+  line-height: 1.45;
+}
 </style>
 
 <!-- PDF.js -->
@@ -864,17 +913,35 @@ openFromURL();
 
 <footer>
   <p>
-    Built by alumna 
+    Built by alumna and webmistress
     <a href="https://www.linkedin.com/in/ardenthira/" target="_blank" rel="noopener noreferrer"> Arden Thira</a> for the CCHS Class of 2003.
   </p>
 
+  <div class="archive-keeper-photo">
+    <img
+      src="images/disheveled.jpg"
+      alt="Arden Thira, creator of the CCHS Class of 2003 Community Archive"
+    >
+  </div>
+  <p class="photo-caption">
+  <a
+    href="https://classreport.org/usa/fl/cape_coral/cchs/2003/"
+    target="_blank"
+    rel="noopener noreferrer"
+    title="Visit the original CCHS Class of 2003 Classreport site"
+  >
+    DO THE TIME WARP AGAIN? →
+  </a>
+</p>
+
   <p> View the
-    <a href="https://github.com/ardent17/class-of-03-archive" target="_blank" rel="noopener noreferrer"> source code and planned updates</a> on Github.
+    <a href="https://github.com/ardent17/class-of-03-archive" target="_blank" rel="noopener noreferrer"> source code</a> on Github.
   </p>
 
-  <p style="margin-top: 12px;">
-    Takedown Requests: If you're pictured here and want something removed or redacted, just reach out and I'll take care of it.
-  </p>
+  <p class="takedown-note">
+  Takedown Requests: If you're pictured here and want something removed or redacted,
+  just reach out and I'll take care of it.
+</p>
   
   <p style="margin-top: 12px;"> 
     <!-- Added a 2px outset border and a solid 2px black drop shadow for that perfect 2000s UI feel -->
